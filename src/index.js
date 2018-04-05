@@ -4,10 +4,12 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import { Provider } from 'react-redux'
 import { syncHistoryWithStore } from 'react-router-redux'
 import { DrizzleProvider } from 'drizzle-react'
+import _ from 'lodash'
 
 // Layouts
 import App from './App'
 import HomeContainer from './layouts/home/HomeContainer'
+import Navbar from './layouts/navbar/Navbar'
 import LoadingContainer from './layouts/loading/LoadingContainer'
 
 // Contracts
@@ -16,6 +18,7 @@ import SimpleStorage from './../build/contracts/SimpleStorage.json'
 import TutorialToken from './../build/contracts/TutorialToken.json'
 import TaroEth from './../build/contracts/TaroEth.json'
 
+import 'font-awesome/css/font-awesome.min.css';
 
 // Redux Store
 import store from './store'
@@ -44,17 +47,20 @@ const options = {
 }
 
 ReactDOM.render((
-    <DrizzleProvider options={options}>
-      <Provider store={store}>
-        <LoadingContainer>
-          <Router history={history}>
-            <Route path="/" component={App}>
-              <IndexRoute component={HomeContainer} />
-            </Route>
-          </Router>
-        </LoadingContainer>
-      </Provider>
-    </DrizzleProvider>
+    <div>
+      <Navbar/>
+      <DrizzleProvider options={options}>
+        <Provider store={store}>
+          <LoadingContainer>
+            <Router history={history}>
+              <Route path="/" component={App}>
+                <IndexRoute component={HomeContainer} />
+              </Route>
+            </Router>
+          </LoadingContainer>
+        </Provider>
+      </DrizzleProvider>
+    </div>
   ),
   document.getElementById('root')
 );

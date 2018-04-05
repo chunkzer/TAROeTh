@@ -20,6 +20,7 @@ contract TaroEth is Ownable{
   uint public minimumIncentive = 0;
 
   struct Petition {
+    address petitioner;
     uint256 incentive;
     uint32 turnaround;
     PetitionStatus status;
@@ -52,6 +53,10 @@ contract TaroEth is Ownable{
 
   function TaroEth() public payable {
     unlockedBalance = msg.value;
+    Petition memory petition1 = Petition(msg.sender, msg.value, uint32(now + turnaround), PetitionStatus(0), VideoStorageOptions(0), Topics(0), Reading("", ""));
+    lastPetitions.push(petition1);
+    Petition memory petition2 = Petition(msg.sender, msg.value, uint32(now + turnaround), PetitionStatus(0), VideoStorageOptions(1), Topics(1), Reading("", ""));
+    lastPetitions.push(petition2);
   }
 
   // Modify State functions
@@ -66,7 +71,7 @@ contract TaroEth is Ownable{
     if (addressToPetitions[msg.sender].petitions.length == 0){
       addressToPetitions[msg.sender].index = hasPetitions.push(msg.sender);
     }
-    Petition memory petition = Petition(msg.value, uint32(now + turnaround), PetitionStatus.Pending, VideoStorageOptions(_storageOption), Topics(_topic), Reading("", ""));
+    Petition memory petition = Petition(msg.sender, msg.value, uint32(now + turnaround), PetitionStatus.Pending, VideoStorageOptions(_storageOption), Topics(_topic), Reading("", ""));
     addressToPetitions[msg.sender].petitions.push(petition);
     lastPetitions[oldestLastPetitionIndex] = petition;
     _updateLastPetitionIndex();
@@ -103,31 +108,32 @@ contract TaroEth is Ownable{
     turnaround = (_turnaround) * 1 days;
   }
 
-  function getLast5Petitions() external view returns(uint[], uint32[], uint8[], uint8[], uint8[]) {
+  function getLast5Petitions() external view returns(address[] petitioner, uint[] incentive, uint32[] turnaround, uint8[] status, uint8[] storageOption, uint8[] topic) {
     Petition[] storage petitions = lastPetitions;
     return returnPetitionArray(petitions);
   }
 
-  //miscInfo, incentive, turnaround, status, storageOption
-  function getPetitionsByPetitioner(address _petitioner) external view returns(uint[], uint32[], uint8[], uint8[], uint8[]) {
+  function getPetitionsByPetitioner(address _petitioner) external view returns(address[] petitioner, uint[] incentive, uint32[] turnaround, uint8[] status, uint8[] storageOption, uint8[] topic) {
     Petition[] storage petitions = addressToPetitions[_petitioner].petitions;
     return returnPetitionArray(petitions);
   }
 
-  function returnPetitionArray(Petition[] storage petitions) internal view returns(uint[], uint32[], uint8[], uint8[], uint8[]) {
+  function returnPetitionArray(Petition[] storage petitions) internal view returns(address[], uint[], uint32[], uint8[], uint8[], uint8[]) {
+    address [] memory petitioners   = new address[](petitions.length);
     uint    [] memory incentives    = new uint[](petitions.length);
     uint32  [] memory turnarounds   = new uint32[](petitions.length);
     uint8   [] memory status        = new uint8[](petitions.length);
     uint8   [] memory storageOption = new uint8[](petitions.length);
     uint8   [] memory topics        = new uint8[](petitions.length);
     for(uint i = 0; i < petitions.length; i++) {
+      petitioners[i]    = petitions[i].petitioner;
       incentives[i]     = petitions[i].incentive;
       turnarounds[i]    = petitions[i].turnaround;
       status[i]         = uint8(petitions[i].status);
       storageOption[i]  = uint8(petitions[i].storageOption);
       topics[i]         = uint8(petitions[i].topic);
     }
-    return (incentives, turnarounds, status, storageOption, topics);
+    return (petitioners, incentives, turnarounds, status, storageOption, topics);
   }
 
   function getReading(address _petitioner, uint _index) external view existingPetition(_petitioner, _index) returns(string, string)  {

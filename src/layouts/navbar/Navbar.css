@@ -1,0 +1,164 @@
+:body {
+  --padding-top: 0px;
+}
+
+html {
+  box-sizing: border-box;
+  background:#white;
+  letter-spacing: 2px;
+  font-family:'helvetica neue';
+  font-size: 20px;
+  font-weight: 200;
+}
+body {
+  margin: 0;
+  padding-top: var(--padding-top);
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+.site-wrap {
+  max-width: 1300px;
+  margin: 30px auto;
+  background:#eeeeee;
+  padding:40px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0);
+  transform: scale(0.98);
+  transition: transform 0.5s;
+  letter-spacing: 2px;
+  font-family:'Fira Mono', monospace;
+}
+
+.site-wrap .hidden {
+  display: none;
+}
+
+.fixed-nav .site-wrap {
+  transform: scale(0.99);
+}
+
+.fixed-nav nav {
+  position: fixed;
+  box-shadow: 0 5px rgba(0,0,0,0.1);
+}
+
+header {
+  text-align: center;
+  height:30vh;
+  background:url(../../assets/moons.jpg) top center no-repeat;
+  background-size:cover;
+  display:flex;
+  align-items:center;
+  justify-content: center;
+  color:white;
+}
+
+h1 {
+  letter-spacing: 1px;
+  font-family: 'Arvo';
+  color:#333;
+  font-size: 3vw;
+  width: 100%;
+  text-shadow: 3px 4px 0 rgba(0,0,0,0.1)
+}
+
+nav {
+  background:black;
+  top:0;
+  width: 100%;
+  transition:all 0.5s;
+  position: relative;
+  z-index: 1;
+}
+
+nav ul {
+  margin: 0;
+  padding:0;
+  list-style: none;
+  display:flex;
+}
+
+nav li {
+  flex:1;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+li.active {
+  border-style: solid;
+  border-width: 2px;
+  background: white;
+  overflow: hidden;
+  font-weight: 600;
+  font-size: 30px;
+}
+
+.fixed-nav li.logo {
+  max-width: 500px;
+}
+
+li.active a {
+  color:black;
+}
+
+a img {
+  border-color: black;
+  border-style: solid;
+  border-width: 7px;
+}
+
+nav a {
+  text-decoration: none;
+  padding:20px;
+  display: inline-block;
+  color:white;
+  transition:all 0.2s;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.links-container {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.item-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.item {
+  width: 350px;
+}
+
+p {
+  font-size: 16px;
+}
+
+.portrait {
+  border-style: solid;
+  border-width: 7px;
+  width: 100%;
+}
+
+.personal-info {
+  margin-left: 15px;
+  flex: 6;
+}
