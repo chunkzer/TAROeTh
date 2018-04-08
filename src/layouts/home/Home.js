@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { ContractForm } from 'drizzle-react-components'
+import { ContractData } from 'drizzle-react-components'
 import LastPetitions from '../petition/LastPetitions.js'
+import PetitionForm from '../petition/PetitionForm.js'
 
 class Home extends Component {
 
@@ -16,12 +17,13 @@ class Home extends Component {
             </div>
           </div>
         </main>
+        <LastPetitions />
         <div className="site-wrap">
-          <LastPetitions />
+          <PetitionForm />
         </div>
-        <div className="site-wrap">
-          <ContractForm contract="TaroEth" method="makePetition" />
-        </div>
+        {/* <div className="site-wrap">
+          <ContractData contract="TaroEth" method="oldestLastPetitionIndex" />
+        </div> */}
       </div>
     )
   }

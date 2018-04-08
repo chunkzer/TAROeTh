@@ -14,7 +14,7 @@ contract TaroEth is Ownable{
   enum Topics { Finance, Love, Success, Health, Work, Danger, Crypto, Open}
 
 
-  uint oldestLastPetitionIndex = 0;
+  uint public oldestLastPetitionIndex = 0;
   uint public turnaround = 7 days;
   uint public unlockedBalance = 0;
   uint public minimumIncentive = 0;
@@ -55,8 +55,22 @@ contract TaroEth is Ownable{
     unlockedBalance = msg.value;
     Petition memory petition1 = Petition(msg.sender, msg.value, uint32(now + turnaround), PetitionStatus(0), VideoStorageOptions(0), Topics(0), Reading("", ""));
     lastPetitions.push(petition1);
-    Petition memory petition2 = Petition(msg.sender, msg.value, uint32(now + turnaround), PetitionStatus(0), VideoStorageOptions(1), Topics(1), Reading("", ""));
+    _updateLastPetitionIndex();
+    Petition memory petition2 = Petition(msg.sender, msg.value, uint32(now + turnaround), PetitionStatus(2), VideoStorageOptions(1), Topics(1), Reading("", ""));
     lastPetitions.push(petition2);
+    _updateLastPetitionIndex();
+    Petition memory petition3 = Petition(msg.sender, msg.value, uint32(now + turnaround), PetitionStatus(1), VideoStorageOptions(1), Topics(2), Reading("", ""));
+    lastPetitions.push(petition3);
+    _updateLastPetitionIndex();
+    Petition memory petition4 = Petition(msg.sender, msg.value, uint32(now + turnaround), PetitionStatus(0), VideoStorageOptions(0), Topics(3), Reading("", ""));
+    lastPetitions.push(petition4);
+    _updateLastPetitionIndex();
+    Petition memory petition5 = Petition(msg.sender, msg.value, uint32(now + turnaround), PetitionStatus(2), VideoStorageOptions(1), Topics(5), Reading("", ""));
+    lastPetitions.push(petition5);
+    _updateLastPetitionIndex();
+    Petition memory petition6 = Petition(msg.sender, msg.value, uint32(now + turnaround), PetitionStatus(1), VideoStorageOptions(1), Topics(6), Reading("", ""));
+    lastPetitions.push(petition6);
+    _updateLastPetitionIndex();
   }
 
   // Modify State functions
@@ -67,6 +81,7 @@ contract TaroEth is Ownable{
   }
 
   function makePetition(Topics _topic, VideoStorageOptions _storageOption) payable public {
+    uint debugThis = minimumIncentive;
     require(msg.value >= minimumIncentive);
     if (addressToPetitions[msg.sender].petitions.length == 0){
       addressToPetitions[msg.sender].index = hasPetitions.push(msg.sender);
@@ -79,7 +94,7 @@ contract TaroEth is Ownable{
   }
 
   function _updateLastPetitionIndex() internal {
-    if(oldestLastPetitionIndex == 4){
+    if(oldestLastPetitionIndex == 5){
       oldestLastPetitionIndex = 0;
     }else {
       oldestLastPetitionIndex.add(1);
@@ -108,7 +123,7 @@ contract TaroEth is Ownable{
     turnaround = (_turnaround) * 1 days;
   }
 
-  function getLast5Petitions() external view returns(address[] petitioner, uint[] incentive, uint32[] turnaround, uint8[] status, uint8[] storageOption, uint8[] topic) {
+  function getLastPetitions() external view returns(address[] petitioner, uint[] incentive, uint32[] turnaround, uint8[] status, uint8[] storageOption, uint8[] topic) {
     Petition[] storage petitions = lastPetitions;
     return returnPetitionArray(petitions);
   }

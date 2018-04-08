@@ -18,10 +18,10 @@ class LastPetitions extends Component {
     // Get the contract ABI
     const abi = TaroEth.abi;
     // Fetch initial value from chain and return cache key for reactive updates.
-    this.dataKey = TaroEth.methods.getLast5Petitions.cacheCall();
+    this.dataKey = TaroEth.methods.getLastPetitions.cacheCall();
     // Iterate over abi for correct function.
     for (var i = 0; i < abi.length; i++) {
-      if (abi[i].name === 'getLast5Petitions') {
+      if (abi[i].name === 'getLastPetitions') {
           this.fnABI = abi[i]
           break
       }
@@ -53,16 +53,14 @@ class LastPetitions extends Component {
       )
     }
     // If the cache key we received earlier isn't in the store yet; the initial value is still being fetched.
-    if(!(this.dataKey in TaroEth.getLast5Petitions)) {
+    if(!(this.dataKey in TaroEth.getLastPetitions)) {
       return (
         <span>Fetching...</span>
       )
     }
 
-    // Show a loading spinner for future updates.
-    var pendingSpinner = TaroEth.synced ? '' : ' 🔄'
-    // Optionally hide loading spinner (EX: ERC20 token symbol).
-    var contractResponse = TaroEth.getLast5Petitions[this.dataKey].value
+    var contractResponse = TaroEth.getLastPetitions[this.dataKey].value
+
     let petitions = this.castDisplayData(contractResponse)
 
     const displayObjectProps = []
@@ -71,7 +69,7 @@ class LastPetitions extends Component {
   })
 
     return(
-      <div>
+      <div className="site-wrap">
         <h2 className="section-header">Latest Petitions:</h2>
         <ul className="cards">
           {displayObjectProps}

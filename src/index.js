@@ -13,9 +13,6 @@ import Navbar from './layouts/navbar/Navbar'
 import LoadingContainer from './layouts/loading/LoadingContainer'
 
 // Contracts
-import ComplexStorage from './../build/contracts/ComplexStorage.json'
-import SimpleStorage from './../build/contracts/SimpleStorage.json'
-import TutorialToken from './../build/contracts/TutorialToken.json'
 import TaroEth from './../build/contracts/TaroEth.json'
 
 import 'font-awesome/css/font-awesome.min.css';
@@ -36,9 +33,6 @@ const options = {
     }
   },
   contracts: [
-    ComplexStorage,
-    SimpleStorage,
-    TutorialToken,
     TaroEth
   ],
   events: {

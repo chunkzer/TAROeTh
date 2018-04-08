@@ -4,6 +4,7 @@
 
 .cards {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     font-family: 'Lato', sans-serif;
 }
@@ -11,33 +12,15 @@
 .card {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    width: 33vw;
-    margin-left: 20px;
-    margin-right: 20px;
+    max-width: 480px;
+    margin-left: 5px;
+    margin-right: 5px;
     background-color: #fff;
-    border-radius: 15px;
+    border-radius: 5%;
 }
 
-.card-topic {
-  display: flex;
-  max-height: 250px;
+.card-header {
   align-items: center;
-}
-
-.card-topic img {
-  margin: 7px;
-  flex-grow: 1;
-  flex-basis: 200px;
-  min-width: auto;
-}
-.card-topic div {
-  flex-grow: 2;
-  flex-shrink: 8;
-  flex-basis: 500px;
-  margin: 7px;
 }
 
 .card-title {
@@ -47,45 +30,48 @@
   align-items: center;
 }
 
-.card-title h1 {
+.card-title > * {
   text-align: center;
-  min-width: 0;
-  flex-grow: 4;
-}
-
-.card-title .button {
-    background-color: #4CAF50; /* Green */
-    border-radius: 5px;
-    color: white;
-    text-align: center;
-    font-size: 32px;
-    align-self: center;
-    flex-grow: 1;
-    flex-shrink: 1;
-    min-width: 100px;
 }
 
 .card:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    background-color: pink;
+    box-shadow: 0 12px 19px 0 rgba(0,0,0,0.4);
+    opacity: 0.65;
+    cursor: pointer;
+}
+
+
+.card-body > span {
+  margin-left: 5px;
+  margin-right: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.preview-topic {
+  margin: 0;
+  padding: 0 0 10px;
+  color: @dark_gray;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.stuff {
+  margin: 0;
+  padding: 0 0 20px;
+  color: #e74c3c;
+  font-size: 20px;
+  font-weight: 400;
 }
 
 .card-body {
     display: flex;
     flex-wrap: wrap;
     padding: 2px 16px;
-    flex: 1
-}
-
-
-.card-body > p {
-  min-width: 50%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 img {
-  margin: 7px;
-  width: 40%;
+  width: 100%;
+  border-radius: 5% 5% 0 0;
 }
