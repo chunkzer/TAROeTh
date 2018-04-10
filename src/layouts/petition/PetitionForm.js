@@ -49,7 +49,6 @@ class PetitionForm extends Component {
             break;
         }
     }
-    debugger;
     this.state = initialState;
     this.handleChange = this.handleChange.bind(this);
   }
@@ -123,17 +122,22 @@ class PetitionForm extends Component {
 
   render() {
     var topicBoxes = []
-    this.topicObjArray.forEach(topic => {topicBoxes.push(
-      <SelectBox
-      {...topic} selected={this.state.topics[topic.title]}
+    this.topicObjArray.forEach((topic, index) => {topicBoxes.push
+      (<span key={index}><SelectBox {...topic}
+       selected={this.state.topics[topic.title]}
        faved={this.state.showcaseTopic === topic.title}
        onSelect={(e) => this.handleTopicClick(e, topic.title)}
        onFave={(e) => this.handleTopicClick(e, topic.title, true)}
-     />
+     /></span>
    )})
 
     var storageBoxes = []
-    this.storageObjArray.forEach(option => {storageBoxes.push(<SelectBox {...option} selected={this.state.storageOptions === option.title} onSelect={() => this.handleStorageClick(option.title)}/>)})
+    this.storageObjArray.forEach((option, index) => {storageBoxes.push
+      (<span key={index}><SelectBox {...option}
+        selected={this.state.storageOptions === option.title}
+        onSelect={() => this.handleStorageClick(option.title)}
+      /></span>
+    )})
 
 
     return (

@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { ContractData } from 'drizzle-react-components'
-import LastPetitions from '../petition/LastPetitions.js'
+import Petitions from '../petition/Petitions.js'
 import PetitionForm from '../petition/PetitionForm.js'
 
 class Home extends Component {
 
   render() {
+
     return (
       <div>
         <main className="site-wrap">
@@ -17,7 +18,8 @@ class Home extends Component {
             </div>
           </div>
         </main>
-        <LastPetitions />
+        <Petitions method="getLastPetitions"/>
+        {/* <Petitions method="getPetitionsByPetitioner" methodArgs={[this.props.accounts[0]]}/> */}
         <div className="site-wrap">
           <PetitionForm />
         </div>

@@ -11,18 +11,18 @@ import './PetitionPreview.css'
  * Create component.
  */
 
-class LastPetitions extends Component {
+class Petitions extends Component {
   constructor(props, context) {
     super(props)
     let TaroEth = context.drizzle.contracts.TaroEth;
-    // Get the contract ABI
-    const abi = TaroEth.abi;
-    // Fetch initial value from chain and return cache key for reactive updates.
-    this.dataKey = TaroEth.methods.getLastPetitions.cacheCall();
 
+    const abi = TaroEth.abi;
+    var methodArgs = this.props.methodArgs ? this.props.methodArgs : [];
+
+    this.dataKey = TaroEth.methods[this.props.method].cacheCall(...methodArgs);
     // Iterate over abi for correct function.
     for (var i = 0; i < abi.length; i++) {
-      if (abi[i].name === 'getLastPetitions') {
+      if (abi[i].name === [this.props.method]) {
           this.fnABI = abi[i]
           break
       }
@@ -57,19 +57,26 @@ class LastPetitions extends Component {
       )
     }
     // If the cache key we received earlier isn't in the store yet; the initial value is still being fetched.
-    if(!(this.dataKey in TaroEth.getLastPetitions)) {
+    if(!(this.dataKey in TaroEth[this.props.method])) {
       return (
         <span>Fetching...</span>
       )
     }
 
-    var contractResponse = TaroEth.getLastPetitions[this.dataKey].value
+    var contractResponse = TaroEth[this.props.method][this.dataKey].value
 
     let petitions = this.castDisplayData(contractResponse)
 
     const displayObjectProps = []
-    petitions.forEach(function (petition, index) {
-    displayObjectProps.push(<li key={index}><PetitionPreview {...petition}/></li>)
+    var filterFunctions = this.props.filters ? this.props.filters : [];
+    var filteredPetitions = petitions.filter(petition => filterFunctions.reduce((status, f) => {
+        if(status === false) return false;
+        return f(petition);
+      }, true)
+    )
+
+    filteredPetitions.forEach(function (petition, index) {
+    displayObjectProps.push(<span key={index}><PetitionPreview {...petition}/></span>)
   })
 
     return(
@@ -83,7 +90,7 @@ class LastPetitions extends Component {
   }
 }
 
-LastPetitions.contextTypes = {
+Petitions.contextTypes = {
   drizzle: PropTypes.object
 }
 
@@ -97,4 +104,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default drizzleConnect(LastPetitions, mapStateToProps)
+export default drizzleConnect(Petitions, mapStateToProps)
