@@ -21,9 +21,6 @@ class Home extends Component {
         <div className="site-wrap">
           <PetitionForm />
         </div>
-        {/* <div className="site-wrap">
-          <ContractData contract="TaroEth" method="oldestLastPetitionIndex" />
-        </div> */}
       </div>
     )
   }

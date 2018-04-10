@@ -2,8 +2,8 @@ import { drizzleConnect } from 'drizzle-react'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './PetitionForm.css'
+import PetitionMap from '../../util/TaroEthSerializer.js'
 import SelectBox from '../select-box/SelectBox.js'
-import ipfs from '../../assets/ipfs.ico'
 
 class PetitionForm extends Component {
   constructor(props, context) {
@@ -16,7 +16,7 @@ class PetitionForm extends Component {
                         {title: 'Work',       iconClass: 'fa fa-briefcase'},
                         {title: 'Fear',       iconClass: 'fa fa-heartbeat'},
                         {title: 'Crypto',     iconClass: 'fa fa-bitcoin'},
-                        {title: 'Everything', iconClass: 'fa fa-star'},
+                        {title: 'Everything', iconClass: 'fa fa-arrows-alt'},
                         ];
     this.storageObjArray = [{title: 'Youtube', iconClass: 'fa fa-youtube'},
                             {title: 'IPFS',    iconClass: 'fa fa-cube'},
@@ -24,10 +24,14 @@ class PetitionForm extends Component {
                           ];
 
     var initialState = {
-      topics: Object.assign(...this.topicObjArray.map(o => {return  {[o.title]: false}})),
-      storageOptions: '',
       comments: '',
+      topics: Object.assign(...this.topicObjArray.map(o => {return  {[o.title]: false}})),
+      showcaseTopic: '',
+      storageOptions: '',
       incentive: 0,
+      formValid: false,
+      formErrors: {},
+      displayFormErrors: false,
     }
 
 
@@ -45,26 +49,50 @@ class PetitionForm extends Component {
             break;
         }
     }
-
+    debugger;
     this.state = initialState;
     this.handleChange = this.handleChange.bind(this);
   }
 
+  //(string _comments, bool[8] _topics, Topic _showcaseTopic, VideoStorageOptions _storageOption)
   handleSubmit() {
-    this.TaroEth.methods.MakePetition.cacheSend(...Object.values(this.state));
+    this.validateFields();
   }
+
+  submitForm() {
+    if(this.state.formValid){
+      this.TaroEth.methods.makePetition.cacheSend(this.state.comments,
+                                                Object.values(this.state.topics),
+                                                PetitionMap.rTopic(this.state.showcaseTopic),
+                                                PetitionMap.rStorageOption(this.state.storageOption),
+                                                {value: this.state.incentive});
+    }else{
+      this.setState(() => ({displayFormErrors: true}));
+    }
+  }
+
 
   handleInputChange(event) {
     this.setState({ [event.target.name]: event.target.value });
   }
 
   handleChange(event) {
-     debugger;
      this.setState({[event.target.name]: event.target.value});
   }
 
-  handleTopicClick(key) {
-    this.setState((prevState) => ({topics: {...prevState.topics, [key]: !prevState.topics[key]}}));
+  handleTopicClick(event, key, fave=false) {
+    if(fave){
+      this.setState((prevState) => ({topics: {...prevState.topics, [key]: true}}));
+      this.setState(() => ({showcaseTopic: (this.state.showcaseTopic === key ? '' : key)}));
+      event.stopPropagation();
+    }else{
+      if(!(Object.values(this.state.topics).includes(true))) {
+        this.setState((prevState) => ({topics: {...prevState.topics, [key]: true}}));
+        this.setState(() => ({showcaseTopic: key}));
+      }else if(key !== this.state.showcaseTopic){
+        this.setState((prevState) => ({topics: {...prevState.topics, [key]: !prevState.topics[key]}}));
+      }
+    }
   }
 
   handleStorageClick(title) {
@@ -75,17 +103,44 @@ class PetitionForm extends Component {
     return `${eth} USD`;
   }
 
+  validateFields() {
+    console.log('validateFields!')
+    let fieldValidationErrors = {};
+    if(typeof PetitionMap.rTopic[this.state.showcaseTopic] === "undefined"){
+      fieldValidationErrors.topics = 'Please choose a favored topic to continue';
+    }
+    if(typeof PetitionMap.rStorageOption[this.state.storageOptions] === "undefined"){
+      fieldValidationErrors.storageOptions = 'Please choose where you\'d like the video reading to be stored';
+    }
+
+    this.setState(() => ({formErrors: fieldValidationErrors}), this.validateForm)
+  }
+
+  validateForm(){
+    let valid = (Object.keys(this.state.formErrors).length == 0 ? true : false)
+    this.setState(() =>({formValid: valid}), this.submitForm)
+  }
+
   render() {
     var topicBoxes = []
-    this.topicObjArray.forEach(topic => {topicBoxes.push(<SelectBox {...topic} selected={this.state.topics[topic.title]} onClick={() => this.handleTopicClick(topic.title)}/>)})
+    this.topicObjArray.forEach(topic => {topicBoxes.push(
+      <SelectBox
+      {...topic} selected={this.state.topics[topic.title]}
+       faved={this.state.showcaseTopic === topic.title}
+       onSelect={(e) => this.handleTopicClick(e, topic.title)}
+       onFave={(e) => this.handleTopicClick(e, topic.title, true)}
+     />
+   )})
 
     var storageBoxes = []
-    this.storageObjArray.forEach(option => {storageBoxes.push(<SelectBox {...option} selected={this.state.storageOptions === option.title} onClick={() => this.handleStorageClick(option.title)}/>)})
+    this.storageObjArray.forEach(option => {storageBoxes.push(<SelectBox {...option} selected={this.state.storageOptions === option.title} onSelect={() => this.handleStorageClick(option.title)}/>)})
 
 
     return (
       <form>
         <h1>What's on your mind?</h1>
+        <label>Make sure to pick out ONE favored topic...</label>
+        {this.state.displayFormErrors && this.state.formErrors.topics ? <div className="form-error">{this.state.formErrors.topics}</div> : ''}
         <div className="selector">
           {topicBoxes}
         </div>
@@ -99,6 +154,7 @@ class PetitionForm extends Component {
         </label>
 
         <h1>Where do you want your reading stored?</h1>
+        {this.state.displayFormErrors && this.state.formErrors.storageOptions ? <div className="form-error">{this.state.formErrors.storageOptions}</div> : ''}
           <div className="selector">
             {storageBoxes}
           </div>

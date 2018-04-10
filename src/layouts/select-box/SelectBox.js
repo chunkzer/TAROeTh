@@ -8,9 +8,10 @@ class SelectBox extends Component {
 
   render() {
     return (
-    <div className={"select-box" + (this.props.selected ? " selected" : "")} onClick={this.props.onClick}>
+    <div className={"select-box" + (this.props.selected ? " selected" : "") + (this.props.faved ? " faved" : "")} onClick={this.props.onSelect}>
+      {this.props.onFave ? <div className="main-topic" onClick={this.props.onFave}><i className={this.props.faved ? "fa fa-star" : "fa fa-star-o"}></i></div> : ''}
       <i className={this.props.iconClass}></i>
-    <div className="box-topic">{this.props.title}</div>
+      <div className="box-topic">{this.props.title}</div>
     </div>
     )
   }

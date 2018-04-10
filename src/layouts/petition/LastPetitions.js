@@ -19,6 +19,7 @@ class LastPetitions extends Component {
     const abi = TaroEth.abi;
     // Fetch initial value from chain and return cache key for reactive updates.
     this.dataKey = TaroEth.methods.getLastPetitions.cacheCall();
+
     // Iterate over abi for correct function.
     for (var i = 0; i < abi.length; i++) {
       if (abi[i].name === 'getLastPetitions') {
@@ -29,7 +30,8 @@ class LastPetitions extends Component {
   }
 
   castDisplayData(data) {
-    var results = _.zip(...[data.petitioner, data.incentive, data.turnaround, data.status, data.topic, data.storageOption])
+
+    var results = _.zip(...[data.petitioner, data.incentive, data.turnaround, data.status, data.showcaseTopic, data.storageOption, data.indexes])
     .map(arr => {var result = new Object
       result.petitioner = arr[0];
       result.incentive = arr[1];
@@ -37,11 +39,13 @@ class LastPetitions extends Component {
       turnaround_date.setSeconds(arr[2]);
       result.turnaround = turnaround_date;
       result.status = PetitionMap.state[arr[3]];
-      result.topic = PetitionMap.topic[arr[4]];
+      result.showcaseTopic = PetitionMap.topic[arr[4]];
       result.storageOption = PetitionMap.storageOption[arr[5]];
+      result.index = arr[6];
       return result;
     })
     return results;
+
   }
 
   render() {

@@ -20,6 +20,12 @@
   border: 2px solid #265DF1;
   background-color: #EFF6FF;
 }
+
+.select-box.selected.faved {
+  border: 2px solid gold;
+  background-color: #DDE3AB;
+}
+
 .select-box:hover {
   box-shadow: 0px 4px 4px rgba(0,0,0,0.06)
 }
@@ -46,4 +52,26 @@ button {
 
 .eth-usd {
   margin-left: 5px;
+}
+
+.main-topic {
+  align-self: flex-end;
+  margin-bottom: 16px;
+  margin-right: 8px;
+}
+
+.form-error {
+  border: 2px solid red;
+  border-radius:  3px;
+  padding: 6px;
+  background-color: #ffdae8;
+  animation: blinker .3s linear;
+  max-width: 800px;
+  /* opacity: 0; */
+
+}
+
+@keyframes blinker {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
 }

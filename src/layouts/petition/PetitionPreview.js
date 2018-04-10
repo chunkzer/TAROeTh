@@ -6,7 +6,7 @@ import finance from '../../assets/PreviewCard/1.png'
 import success from '../../assets/PreviewCard/2.png'
 import health from '../../assets/PreviewCard/3.png'
 import work from '../../assets/PreviewCard/4.png'
-import danger from '../../assets/PreviewCard/5.png'
+import fear from '../../assets/PreviewCard/5.png'
 import crypto from '../../assets/PreviewCard/6.png'
 import open from '../../assets/PreviewCard/7.png'
 
@@ -21,28 +21,32 @@ class PetitionPreview extends Component {
       "Success": success,
       "Health": health,
       "Work": work,
-      "Danger": danger,
+      "Fear": fear,
       "Crypto": crypto,
       "Open": open,
     }
 
     const copyMap = {
-      "Love": "Looking for that LOVE",
-      "Finance": "Keep your finances balanced",
-      "Success": "Looking for the path to success",
-      "Health": "Health and hearth",
-      "Work": "Work! Work! Work!",
-      "Danger": "What danger lies ahead and what danger lies inside?",
-      "Crypto": "HODL. SODL. Cryptic Crypto questions...",
-      "Open": "An Open Petition, let the cards say what they may...",
+      "Love": "Explorations of Love",
+      "Finance": "Explorations of Finance",
+      "Success": "Explorations of Success",
+      "Health": "Explorations of Health",
+      "Work": "Explorations of Work",
+      "Fear": "Explorations onto Fears",
+      "Crypto": "Explorations of Crypto",
+      "Open": "Free form explorations",
     }
-    this.cardImage = cardImageMap[this.props.topic];
-    this.topicCopy = copyMap[this.props.topic];
+    this.cardImage = cardImageMap[this.props.showcaseTopic];
+    this.topicCopy = copyMap[this.props.showcaseTopic];
+  }
+
+  handleClick() {
+    console.log("Go To Petition with" + this.props.index);
   }
 
   render() {
     return (
-    <li className="card">
+    <li className="card" onClick={() => this.handleClick()}>
       <img className="card-header" src={this.cardImage}/>
       <div className="card-body">
         <h1 className="preview-topic">{this.topicCopy}</h1>

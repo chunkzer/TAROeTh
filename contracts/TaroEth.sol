@@ -3,30 +3,36 @@ pragma solidity ^0.4.19;
 import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
 import 'zeppelin-solidity/contracts/math/SafeMath.sol';
 
+pragma solidity ^0.4.19;
+
 contract TaroEth is Ownable{
   using SafeMath for uint256;
 
-  event NewPetition(uint incentive, uint32 turnaround, PetitionStatus status, VideoStorageOptions storageOption, Topics topic);
+  event NewPetition(uint incentive, bool[8] topics, uint32 turnaround, Topic showcaseTopic, VideoStorageOptions storageOption);
   event NewReading(string url);
 
   enum PetitionStatus { Pending, Fulfilled, Cancelled}
   enum VideoStorageOptions { Youtube, IPFS, Swarm}
-  enum Topics { Finance, Love, Success, Health, Work, Danger, Crypto, Open}
+  enum Topic {Love, Finance, Success, Health, Work, Fear, Crypto, Open}
 
 
-  uint public oldestLastPetitionIndex = 0;
-  uint public turnaround = 7 days;
+  uint public maximumTurnaround = 7 days;
   uint public unlockedBalance = 0;
   uint public minimumIncentive = 0;
 
+
+  //Follow this order (with omissions when necessary) for all input / output parameters for Petition.
+  //Prefix external input output parameters
   struct Petition {
     address petitioner;
     uint256 incentive;
-    uint32 turnaround;
-    PetitionStatus status;
-    VideoStorageOptions storageOption;
-    Topics topic;
-    Reading reading;
+    Reading reading; //who knows
+    string comments; //who knows
+    uint32 turnaround; //uint32
+    bool[8] topics; //8bits
+    PetitionStatus status; //uint8
+    Topic showcaseTopic; //uint8
+    VideoStorageOptions storageOption; //uint8
   }
 
   struct Reading {
@@ -34,43 +40,21 @@ contract TaroEth is Ownable{
     string commentary;
   }
 
-  struct IndexedPetitions {
-    uint index;
-    Petition[] petitions;
-  }
 
-  Petition[] internal lastPetitions;
-  address[] public hasPetitions;
+  address[] public petitionersAddresses;
+  mapping(address => uint[]) public addressToPetitionIndexes;
+  Petition[] petitions;
 
-  mapping(address => IndexedPetitions) addressToPetitions;
-
-  modifier existingPetition(address _petitioner, uint _index) {
-    IndexedPetitions storage p = addressToPetitions[_petitioner];
-    require(hasPetitions[p.index] == msg.sender);
-    require(_index <= (p.petitions.length.sub(1)));
+  modifier existingPetition(uint _index) {
+    require(petitions[_index].turnaround != 0);
     _;
   }
 
   function TaroEth() public payable {
     unlockedBalance = msg.value;
-    Petition memory petition1 = Petition(msg.sender, msg.value, uint32(now + turnaround), PetitionStatus(0), VideoStorageOptions(0), Topics(0), Reading("", ""));
-    lastPetitions.push(petition1);
-    _updateLastPetitionIndex();
-    Petition memory petition2 = Petition(msg.sender, msg.value, uint32(now + turnaround), PetitionStatus(2), VideoStorageOptions(1), Topics(1), Reading("", ""));
-    lastPetitions.push(petition2);
-    _updateLastPetitionIndex();
-    Petition memory petition3 = Petition(msg.sender, msg.value, uint32(now + turnaround), PetitionStatus(1), VideoStorageOptions(1), Topics(2), Reading("", ""));
-    lastPetitions.push(petition3);
-    _updateLastPetitionIndex();
-    Petition memory petition4 = Petition(msg.sender, msg.value, uint32(now + turnaround), PetitionStatus(0), VideoStorageOptions(0), Topics(3), Reading("", ""));
-    lastPetitions.push(petition4);
-    _updateLastPetitionIndex();
-    Petition memory petition5 = Petition(msg.sender, msg.value, uint32(now + turnaround), PetitionStatus(2), VideoStorageOptions(1), Topics(5), Reading("", ""));
-    lastPetitions.push(petition5);
-    _updateLastPetitionIndex();
-    Petition memory petition6 = Petition(msg.sender, msg.value, uint32(now + turnaround), PetitionStatus(1), VideoStorageOptions(1), Topics(6), Reading("", ""));
-    lastPetitions.push(petition6);
-    _updateLastPetitionIndex();
+    makePetition("Hopefully it works...", [true,false,false,false,false,false,false,false], Topic(0), VideoStorageOptions(0));
+    makePetition("The second of many...", [false,true,false,false,false,false,false,false], Topic(0), VideoStorageOptions(1));
+    makePetition("More supply...",        [true,false,false,false,false,false,false,false], Topic(0), VideoStorageOptions(1));
   }
 
   // Modify State functions
@@ -80,80 +64,132 @@ contract TaroEth is Ownable{
     owner.transfer(withdrawSum);
   }
 
-  function makePetition(Topics _topic, VideoStorageOptions _storageOption) payable public {
-    uint debugThis = minimumIncentive;
+  function makePetition(string _comments, bool[8] _topics, Topic _showcaseTopic, VideoStorageOptions _storageOption) payable public {
     require(msg.value >= minimumIncentive);
-    if (addressToPetitions[msg.sender].petitions.length == 0){
-      addressToPetitions[msg.sender].index = hasPetitions.push(msg.sender);
+    require(_topics != [false, false, false, false, false, false, false, false]);
+    require(_showcaseTopic >= 0 && showcaseTopic < 8);
+    require(_storageOption >= 0 && showcaseTopic < 3);
+    if (addressToPetitionIndexes[msg.sender].length == 0){
+      petitionersAddresses.push(msg.sender);
     }
-    Petition memory petition = Petition(msg.sender, msg.value, uint32(now + turnaround), PetitionStatus.Pending, VideoStorageOptions(_storageOption), Topics(_topic), Reading("", ""));
-    addressToPetitions[msg.sender].petitions.push(petition);
-    lastPetitions[oldestLastPetitionIndex] = petition;
-    _updateLastPetitionIndex();
-    NewPetition(msg.value, uint32(now + turnaround), PetitionStatus.Pending, _storageOption, _topic);
+    Petition memory petition = Petition({
+      petitioner: msg.sender,
+      incentive: msg.value,
+      reading: Reading("",""),
+      comments: _comments,
+      turnaround: uint32(now + maximumTurnaround),
+      topics: _topics,
+      status: PetitionStatus.Pending,
+      showcaseTopic: (_showcaseTopic),
+      storageOption: VideoStorageOptions(_storageOption)
+      });
+    uint newPetitionIndex = petitions.push(petition);
+    addressToPetitionIndexes[msg.sender].push((newPetitionIndex - 1));
+    NewPetition(msg.value, _topics, uint32(now + maximumTurnaround), _showcaseTopic, _storageOption);
   }
 
-  function _updateLastPetitionIndex() internal {
-    if(oldestLastPetitionIndex == 5){
-      oldestLastPetitionIndex = 0;
-    }else {
-      oldestLastPetitionIndex.add(1);
-    }
-  }
-
-  function cancelPetition(uint256 _index) public existingPetition(msg.sender, _index) {
-    Petition[] storage petitions = addressToPetitions[msg.sender].petitions;
+  function cancelPetition(uint256 _index) public existingPetition(_index) {
+    require(petitions[_index].petitioner == msg.sender);
     require(petitions[_index].status == PetitionStatus.Pending);
     require(petitions[_index].turnaround > now);
     petitions[_index].status = PetitionStatus.Cancelled;
     msg.sender.transfer(petitions[_index].incentive);
   }
 
-  function makeReading(string _url, string _commentary, address _petitioner, uint _index) external onlyOwner existingPetition(_petitioner, _index) {
-    Petition storage petition = addressToPetitions[msg.sender].petitions[_index];
-    require(petition.status == PetitionStatus.Pending);
-    petition.status = PetitionStatus.Fulfilled;
-    unlockedBalance.add(petition.incentive);
-    petition.reading =  Reading(_url, _commentary);
+  function makeReading(string _url, string _commentary, uint _index) external onlyOwner existingPetition(_index) {
+    require(petitions[_index].status == PetitionStatus.Pending);
+    petitions[_index].status = PetitionStatus.Fulfilled;
+    unlockedBalance.add(petitions[_index].incentive);
+    petitions[_index].reading =  Reading(_url, _commentary);
     NewReading(_url);
   }
 
   function modifyConstraints(uint _turnaround, uint _minimumIncentive) external onlyOwner {
     minimumIncentive = _minimumIncentive;
-    turnaround = (_turnaround) * 1 days;
+    maximumTurnaround = (_turnaround) * 1 days;
   }
 
-  function getLastPetitions() external view returns(address[] petitioner, uint[] incentive, uint32[] turnaround, uint8[] status, uint8[] storageOption, uint8[] topic) {
-    Petition[] storage petitions = lastPetitions;
-    return returnPetitionArray(petitions);
-  }
-
-  function getPetitionsByPetitioner(address _petitioner) external view returns(address[] petitioner, uint[] incentive, uint32[] turnaround, uint8[] status, uint8[] storageOption, uint8[] topic) {
-    Petition[] storage petitions = addressToPetitions[_petitioner].petitions;
-    return returnPetitionArray(petitions);
-  }
-
-  function returnPetitionArray(Petition[] storage petitions) internal view returns(address[], uint[], uint32[], uint8[], uint8[], uint8[]) {
-    address [] memory petitioners   = new address[](petitions.length);
-    uint    [] memory incentives    = new uint[](petitions.length);
-    uint32  [] memory turnarounds   = new uint32[](petitions.length);
-    uint8   [] memory status        = new uint8[](petitions.length);
-    uint8   [] memory storageOption = new uint8[](petitions.length);
-    uint8   [] memory topics        = new uint8[](petitions.length);
-    for(uint i = 0; i < petitions.length; i++) {
-      petitioners[i]    = petitions[i].petitioner;
-      incentives[i]     = petitions[i].incentive;
-      turnarounds[i]    = petitions[i].turnaround;
-      status[i]         = uint8(petitions[i].status);
-      storageOption[i]  = uint8(petitions[i].storageOption);
-      topics[i]         = uint8(petitions[i].topic);
+  function getLastPetitions()
+  external
+  view returns(uint[] indexes,
+               address[] petitioner,
+               uint[] incentive,
+               uint32[] turnaround,
+               uint8[] status,
+               uint8[] showcaseTopic,
+               uint8[] storageOption
+  ){
+    uint resultLength;
+    if(petitions.length < 6){
+      resultLength = petitions.length;
+    }else{
+      resultLength = 6;
     }
-    return (petitioners, incentives, turnarounds, status, storageOption, topics);
+    uint[] memory petitionIndexes = new uint[](resultLength);
+    Petition[] memory result = new Petition[](resultLength);
+    //6 being the magic number of returned petitions...
+    if(petitions.length < 6) {
+      for(uint i = 0; i < petitions.length; i++){
+        result[i] = petitions[i];
+        petitionIndexes[i] = i;
+      }
+      return serializePetitionArray(petitionIndexes, result);
+    }else{
+      uint arrIndex = 0;
+      for(i = (petitions.length - 6); i != petitions.length; i++){
+        result[arrIndex] = (petitions[i]);
+        petitionIndexes[arrIndex] = i;
+        arrIndex++;
+      }
+      return serializePetitionArray(petitionIndexes, result);
+    }
   }
 
-  function getReading(address _petitioner, uint _index) external view existingPetition(_petitioner, _index) returns(string, string)  {
-    require(addressToPetitions[_petitioner].petitions[_index].status == PetitionStatus.Fulfilled);
-    Reading storage reading = addressToPetitions[_petitioner].petitions[_index].reading;
+  function getPetitionsByPetitioner(address _petitioner)
+  external
+  view
+  returns(uint[] indexes,
+          address[] petitioner,
+          uint[] incentive,
+          uint32[] turnaround,
+          uint8[] status,
+          uint8[] showcaseTopic,
+          uint8[] storageOption
+  ){
+    uint resultLength = addressToPetitionIndexes[_petitioner].length;
+    Petition[] memory result = new Petition[](resultLength);
+    uint[] memory petitionIndexes = new uint[](resultLength);
+    for(uint i = 0; i < resultLength; i++){
+      petitionIndexes[i] = addressToPetitionIndexes[_petitioner][i];
+      result[i] = (petitions[petitionIndexes[i]]);
+    }
+    return serializePetitionArray(petitionIndexes, result);
+  }
+
+  function serializePetitionArray(uint[] petitionIndexes, Petition[] _petitions)
+  internal
+  pure
+  returns(uint[], address[], uint[], uint32[], uint8[], uint8[], uint8[]) {
+    address [] memory petitioners   = new address[](_petitions.length);
+    uint    [] memory incentives    = new uint[](_petitions.length);
+    uint32  [] memory turnarounds   = new uint32[](_petitions.length);
+    uint8   [] memory status        = new uint8[](_petitions.length);
+    uint8   [] memory showcaseTopic = new uint8[](_petitions.length);
+    uint8   [] memory storageOption = new uint8[](_petitions.length);
+    for(uint i = 0; i < _petitions.length; i++) {
+      petitioners[i]    = _petitions[i].petitioner;
+      incentives[i]     = _petitions[i].incentive;
+      turnarounds[i]    = _petitions[i].turnaround;
+      status[i]         = uint8(_petitions[i].status);
+      showcaseTopic[i]  = uint8(_petitions[i].showcaseTopic);
+      storageOption[i]  = uint8(_petitions[i].storageOption);
+    }
+    return (petitionIndexes, petitioners, incentives, turnarounds, status, showcaseTopic, storageOption);
+  }
+
+  function getReading(uint _index) external view existingPetition(_index) returns(string, string)  {
+    require(petitions[_index].status == PetitionStatus.Fulfilled);
+    Reading storage reading = petitions[_index].reading;
     return (reading.url, reading.commentary);
   }
 }
