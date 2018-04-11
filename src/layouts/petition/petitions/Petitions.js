@@ -1,10 +1,10 @@
 import { drizzleConnect } from 'drizzle-react'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import PetitionPreview from './PetitionPreview.js'
+import PetitionPreview from '../petition-preview/PetitionPreview.js'
 import _ from 'lodash'
-import PetitionMap from '../../util/TaroEthSerializer.js'
-import './PetitionPreview.css'
+import PetitionMap from '../../../util/TaroEthSerializer.js'
+// import './PetitionPreview.css'
 
 
 /*

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { ContractData } from 'drizzle-react-components'
-import Petitions from '../petition/Petitions.js'
-import PetitionForm from '../petition/PetitionForm.js'
+import Petitions from '../petition/petitions/Petitions.js'
+import PetitionForm from '../petition/petition-form/PetitionForm.js'
 
 class Home extends Component {
 

@@ -2,8 +2,8 @@ import { drizzleConnect } from 'drizzle-react'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './PetitionForm.css'
-import PetitionMap from '../../util/TaroEthSerializer.js'
-import SelectBox from '../select-box/SelectBox.js'
+import PetitionMap from '../../../util/TaroEthSerializer.js'
+import SelectBox from '../../select-box/SelectBox.js'
 
 class PetitionForm extends Component {
   constructor(props, context) {

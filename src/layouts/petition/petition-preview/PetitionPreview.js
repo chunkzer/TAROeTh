@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './PetitionPreview.css'
-import love from '../../assets/PreviewCard/0.png'
-import finance from '../../assets/PreviewCard/1.png'
-import success from '../../assets/PreviewCard/2.png'
-import health from '../../assets/PreviewCard/3.png'
-import work from '../../assets/PreviewCard/4.png'
-import fear from '../../assets/PreviewCard/5.png'
-import crypto from '../../assets/PreviewCard/6.png'
-import open from '../../assets/PreviewCard/7.png'
+import love from '../../../assets/PreviewCard/0.png'
+import finance from '../../../assets/PreviewCard/1.png'
+import success from '../../../assets/PreviewCard/2.png'
+import health from '../../../assets/PreviewCard/3.png'
+import work from '../../../assets/PreviewCard/4.png'
+import fear from '../../../assets/PreviewCard/5.png'
+import crypto from '../../../assets/PreviewCard/6.png'
+import open from '../../../assets/PreviewCard/7.png'
 
 
 
