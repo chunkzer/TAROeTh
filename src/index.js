@@ -9,8 +9,6 @@ import _ from 'lodash'
 // Layouts
 import App from './App'
 import HomeContainer from './layouts/home/HomeContainer'
-import Navbar from './layouts/navbar/Navbar'
-import Footer from './layouts/footer/Footer'
 import LoadingContainer from './layouts/loading/LoadingContainer'
 import PetitionsContainer from './layouts/petition/petitions-container/PetitionsContainer.js'
 import PetitionForm from './layouts/petition/petition-form/PetitionForm.js'
@@ -46,8 +44,6 @@ const options = {
 }
 
 ReactDOM.render((
-    <div>
-      <Navbar/>
       <DrizzleProvider options={options}>
         <Provider store={store}>
           <LoadingContainer>
@@ -71,8 +67,6 @@ ReactDOM.render((
           </LoadingContainer>
         </Provider>
       </DrizzleProvider>
-      <Footer/>
-    </div>
   ),
   document.getElementById('root')
 );

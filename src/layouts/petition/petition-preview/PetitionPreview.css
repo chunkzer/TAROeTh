@@ -75,3 +75,8 @@ img {
   width: 100%;
   border-radius: 5% 5% 0 0;
 }
+
+a {
+  color: inherit; /* blue colors for links too */
+  text-decoration: inherit; /* no underline */
+}

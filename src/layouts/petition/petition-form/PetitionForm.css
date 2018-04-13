@@ -75,3 +75,10 @@ button {
   0%   { opacity: 0; }
   100% { opacity: 1; }
 }
+
+.petition-form {
+  display: flex;
+}
+.card-preview {
+  margin-left: 13px;
+}

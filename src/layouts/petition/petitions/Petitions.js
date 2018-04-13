@@ -1,5 +1,6 @@
 import { drizzleConnect } from 'drizzle-react'
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 import PropTypes from 'prop-types'
 import PetitionPreview from '../petition-preview/PetitionPreview.js'
 import _ from 'lodash'
@@ -41,7 +42,7 @@ class Petitions extends Component {
       result.status = PetitionMap.status[arr[3]];
       result.showcaseTopic = PetitionMap.topic[arr[4]];
       result.storageOption = PetitionMap.storageOption[arr[5]];
-      result.index = arr[6];
+      result.index = Number(arr[6]);
       return result;
     })
     return results;
@@ -76,7 +77,7 @@ class Petitions extends Component {
     )
 
     filteredPetitions.forEach(function (petition, index) {
-      displayObjectProps.push(<span key={index}><PetitionPreview {...petition}/></span>)
+      displayObjectProps.push(<Link key={index} to={"/petition/" + (petition.index + 1)}><PetitionPreview {...petition}/></Link>)
     })
 
     const emptyMessage = displayObjectProps.length != petitions.length ? "There are no petitions matching..." : "There doesn't seem to be anything here...";

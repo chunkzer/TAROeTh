@@ -28,10 +28,10 @@ class PetitionsContainer extends Component {
           this.containerType = ContainerTypes[3];
     }
 
-    this.filterObjArray=[{title: 'Fulfilled',   iconClass: 'fa fa-heart'},
-                        {title:  'Pending',     iconClass: 'fa fa-money'},
-                        {title:  'Expired',     iconClass: 'fa fa-trophy'},
-                        {title:  'Cancelled',   iconClass: 'fa fa-medkit'},
+    this.filterObjArray=[{title: 'Fulfilled',   iconClass: 'fa fa-check'},
+                        {title:  'Pending',     iconClass: 'fa fa-refresh'},
+                        {title:  'Expired',     iconClass: 'fa fa-clock-o'},
+                        {title:  'Cancelled',   iconClass: 'fa fa-ban'},
                         ];
 
     this.state = {
@@ -87,8 +87,6 @@ class PetitionsContainer extends Component {
 
     return (
       <div className="site-wrap">
-        <h1>My Petitions</h1>
-        <label>Filter for Status:</label>
         <div className="selector">
           {filterBoxes}
         </div>

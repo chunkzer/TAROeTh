@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 import { ContractData } from 'drizzle-react-components'
 import Petitions from '../petition/petitions/Petitions.js'
 import PetitionForm from '../petition/petition-form/PetitionForm.js'
@@ -14,7 +15,7 @@ class Home extends Component {
           <div className='home-title'>
             <h1 className="main-header">Finally! Decentralized* Tarot Readings!</h1>
             <label>*kinda</label><br/>
-            <button className="make-petition">Make Petition</button>
+          <Link to="/petition/new"><button className="make-petition">Make Petition</button></Link>
           </div>
           <div className="latest-petitions">
             <h1>Latest:</h1>

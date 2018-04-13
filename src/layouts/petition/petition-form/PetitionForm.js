@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import './PetitionForm.css'
 import PetitionMap from '../../../util/TaroEthSerializer.js'
 import SelectBox from '../../select-box/SelectBox.js'
+import cardback from  '../../../assets/FullCard/cardback.jpg'
 
 class PetitionForm extends Component {
   constructor(props, context) {
@@ -138,41 +139,56 @@ class PetitionForm extends Component {
         onSelect={() => this.handleStorageClick(option.title)}
       /></span>
     )})
+    var fullcard;
+    if(this.state.showcaseTopic === ''){
+      fullcard = (<div className="card-preview"><img src={cardback}></img></div>)
+    }else{
+      fullcard = (<div className="card-preview"><img src={PetitionMap.topicObj[this.state.showcaseTopic].fullcard}></img></div>)
+    }
+
 
 
     return (
       <div className="site-wrap">
-        <form>
-          <h1>What's on your mind?</h1>
-          <label>Make sure to pick out ONE favored topic...</label>
-          {this.state.displayFormErrors && this.state.formErrors.topics ? <div className="form-error">{this.state.formErrors.topics}</div> : ''}
-          <div className="selector">
-            {topicBoxes}
-          </div>
+        <form className="petition-form">
+          <div className="form-fields">
+            <h1>What's on your mind?</h1>
+            <label>Make sure to pick out ONE favored topic...</label>
+            {this.state.displayFormErrors && this.state.formErrors.topics ? <div className="form-error">{this.state.formErrors.topics}</div> : ''}
+            <div className="selector">
+              {topicBoxes}
+            </div>
 
-          <h1>Would you mind sharing a little about yourself?</h1><br/>
+            <h1>Would you mind sharing a little about yourself?</h1><br/>
+            <label>
+              This is optional so don't worry too much about it.
+              <div>
+                <textarea name="comments" value={this.state.comments} onChange={this.handleChange} rows="5" cols="70"/>
+              </div>
+            </label>
+
+            <h1>Where do you want your reading stored?</h1>
+            {this.state.displayFormErrors && this.state.formErrors.storageOptions ? <div className="form-error">{this.state.formErrors.storageOptions}</div> : ''}
+              <div className="selector">
+                {storageBoxes}
+              </div>
+
+          <h1>Finally I'd like to ask you to add a little ETH incentive</h1>
           <label>
-            This is optional so don't worry too much about it.
-            <div>
-              <textarea name="comments" value={this.state.comments} onChange={this.handleChange} rows="5" cols="70"/>
+            I might get around to a few 0 ETH petitions, but this is not my job y'know...
+            <div className="eth-input">
+              <input name="incentive" value={this.state.incentive} onChange={this.handleChange} type="number"/>
+              <span className="eth-usd">This comes around to: {this.convertEth(this.state.incentive)}</span>
             </div>
           </label>
+          <button key="submit" className="pure-button" type="button" onClick={() => this.handleSubmit()}>Submit</button>
+        </div>
+        {
+          fullcard
+        }
+        <div className="card-preview">
 
-          <h1>Where do you want your reading stored?</h1>
-          {this.state.displayFormErrors && this.state.formErrors.storageOptions ? <div className="form-error">{this.state.formErrors.storageOptions}</div> : ''}
-            <div className="selector">
-              {storageBoxes}
-            </div>
-
-        <h1>Finally I'd like to ask you to add a little ETH incentive</h1>
-        <label>
-          I might get around to a few 0 ETH petitions, but this is not my job y'know...
-          <div className="eth-input">
-            <input name="incentive" value={this.state.incentive} onChange={this.handleChange} type="number"/>
-            <span className="eth-usd">This comes around to: {this.convertEth(this.state.incentive)}</span>
-          </div>
-        </label>
-        <button key="submit" className="pure-button" type="button" onClick={() => this.handleSubmit()}>Submit</button>
+        </div>
       </form>
     </div>
     )

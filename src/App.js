@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import Navbar from './layouts/navbar/Navbar'
+import Footer from './layouts/footer/Footer'
 
 // Styles
 import './css/oswald.css'
@@ -10,7 +12,9 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Navbar/>
         {this.props.children}
+        <Footer/>
       </div>
     );
   }

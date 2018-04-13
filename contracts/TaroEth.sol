@@ -13,7 +13,7 @@ contract TaroEth is Ownable{
 
   enum PetitionStatus { Pending, Fulfilled, Cancelled}
   enum VideoStorageOptions { Youtube, IPFS, Swarm}
-  enum Topic {Love, Finance, Success, Health, Work, Fear, Crypto, Open}
+  enum Topic {Love, Finance, Success, Health, Work, Fear, Crypto, Everything}
 
 
   uint public maximumTurnaround = 7 days;
