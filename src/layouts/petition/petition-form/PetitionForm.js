@@ -5,6 +5,7 @@ import './PetitionForm.css'
 import PetitionMap from '../../../util/TaroEthSerializer.js'
 import SelectBox from '../../select-box/SelectBox.js'
 import cardback from  '../../../assets/FullCard/cardback.jpg'
+import axios from 'axios'
 
 class PetitionForm extends Component {
   constructor(props, context) {
@@ -33,6 +34,7 @@ class PetitionForm extends Component {
       formValid: false,
       formErrors: {},
       displayFormErrors: false,
+      ethValue: ''
     }
 
 
@@ -100,7 +102,7 @@ class PetitionForm extends Component {
   }
 
   convertEth(eth) {
-    return `${eth} USD`;
+    return "$ " + (eth * this.state.ethValue) + " USD";
   }
 
   validateFields() {
@@ -119,6 +121,15 @@ class PetitionForm extends Component {
   validateForm(){
     let valid = (Object.keys(this.state.formErrors).length == 0 ? true : false)
     this.setState(() =>({formValid: valid}), this.submitForm)
+  }
+
+  componentDidMount(){
+    axios({
+      url: "https://api.coinmarketcap.com/v1/ticker/ethereum/",
+      method: 'get'
+    }).then(response => {
+      this.setState(() => ({ethValue: Number(response.data[0].price_usd) }))
+    })
   }
 
   render() {
@@ -152,14 +163,14 @@ class PetitionForm extends Component {
       <div className="site-wrap">
         <form className="petition-form">
           <div className="form-fields">
-            <h1>What's on your mind?</h1>
+            <h2>What's on your mind?</h2>
             <label>Make sure to pick out ONE favored topic...</label>
             {this.state.displayFormErrors && this.state.formErrors.topics ? <div className="form-error">{this.state.formErrors.topics}</div> : ''}
             <div className="selector">
               {topicBoxes}
             </div>
 
-            <h1>Would you mind sharing a little about yourself?</h1><br/>
+            <h2>Would you mind sharing a little about yourself?</h2><br/>
             <label>
               This is optional so don't worry too much about it.
               <div>
@@ -167,25 +178,23 @@ class PetitionForm extends Component {
               </div>
             </label>
 
-            <h1>Where do you want your reading stored?</h1>
+            <h2>Where do you want your reading stored?</h2>
             {this.state.displayFormErrors && this.state.formErrors.storageOptions ? <div className="form-error">{this.state.formErrors.storageOptions}</div> : ''}
               <div className="selector">
                 {storageBoxes}
               </div>
 
-          <h1>Finally I'd like to ask you to add a little ETH incentive</h1>
+          <h2>Consider adding an ETH incentive:</h2>
           <label>
             I might get around to a few 0 ETH petitions, but this is not my job y'know...
             <div className="eth-input">
               <input name="incentive" value={this.state.incentive} onChange={this.handleChange} type="number"/>
-              <span className="eth-usd">This comes around to: {this.convertEth(this.state.incentive)}</span>
+              {this.state.ethValue !== '' ? <span className="eth-usd">This comes around to: {this.convertEth(this.state.incentive)}</span> : ''}
             </div>
           </label>
           <button key="submit" className="pure-button" type="button" onClick={() => this.handleSubmit()}>Submit</button>
         </div>
-        {
-          fullcard
-        }
+        {fullcard}
         <div className="card-preview">
 
         </div>
