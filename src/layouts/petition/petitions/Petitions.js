@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import PetitionPreview from '../petition-preview/PetitionPreview.js'
 import _ from 'lodash'
 import PetitionMap from '../../../util/TaroEthSerializer.js'
-// import './PetitionPreview.css'
+import '../petition-preview/PetitionPreview.css'
 
 
 /*
@@ -38,7 +38,7 @@ class Petitions extends Component {
       let turnaround_date = new Date();
       turnaround_date.setSeconds(arr[2]);
       result.turnaround = turnaround_date;
-      result.status = PetitionMap.state[arr[3]];
+      result.status = PetitionMap.status[arr[3]];
       result.showcaseTopic = PetitionMap.topic[arr[4]];
       result.storageOption = PetitionMap.storageOption[arr[5]];
       result.index = arr[6];
@@ -66,9 +66,9 @@ class Petitions extends Component {
     var contractResponse = TaroEth[this.props.method][this.dataKey].value
 
     let petitions = this.castDisplayData(contractResponse)
-
     const displayObjectProps = []
     var filterFunctions = this.props.filters ? this.props.filters : [];
+
     var filteredPetitions = petitions.filter(petition => filterFunctions.reduce((status, f) => {
         if(status === false) return false;
         return f(petition);
@@ -76,14 +76,16 @@ class Petitions extends Component {
     )
 
     filteredPetitions.forEach(function (petition, index) {
-    displayObjectProps.push(<span key={index}><PetitionPreview {...petition}/></span>)
-  })
+      displayObjectProps.push(<span key={index}><PetitionPreview {...petition}/></span>)
+    })
+
+    const emptyMessage = displayObjectProps.length != petitions.length ? "There are no petitions matching..." : "There doesn't seem to be anything here...";
 
     return(
-      <div className="site-wrap">
-        <h2 className="section-header">Latest Petitions:</h2>
+      <div>
         <ul className="cards">
           {displayObjectProps}
+          {displayObjectProps.length === 0 ? <div>{emptyMessage}</div> : ''}
         </ul>
       </div>
     )

@@ -53,8 +53,14 @@ contract TaroEth is Ownable{
   function TaroEth() public payable {
     unlockedBalance = msg.value;
     makePetition("Hopefully it works...", [true,false,false,false,false,false,false,false], Topic(0), VideoStorageOptions(0));
-    makePetition("The second of many...", [false,true,false,false,false,false,false,false], Topic(0), VideoStorageOptions(1));
-    makePetition("More supply...",        [true,false,false,false,false,false,false,false], Topic(0), VideoStorageOptions(1));
+    makePetition("The second of many...", [false,true,false,false,false,false,false,false], Topic(1), VideoStorageOptions(1));
+    makePetition("More supply...",        [true,false,false,false,false,false,false,false], Topic(2), VideoStorageOptions(1));
+    makePetition("Hopefully it works...", [true,false,false,false,false,false,false,false], Topic(3), VideoStorageOptions(0));
+    makePetition("The second of many...", [false,true,false,false,false,false,false,false], Topic(4), VideoStorageOptions(1));
+    makePetition("More supply...",        [true,false,false,false,false,false,false,false], Topic(5), VideoStorageOptions(1));
+
+    makeReading("https://www.youtube.com/embed/ohQPySWJToo", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque metus odio, tristique eget tempor eu, commodo nec purus. Vestibulum id neque id ipsum tempor tempor faucibus ut lacus. Phasellus urna velit, condimentum ut suscipit ac, tristique ut diam. Donec ultrices libero sit amet eros lobortis, ut lacinia nisl pharetra. In lobortis purus nec semper sagittis. Nulla et orci non dui posuere finibus accumsan at nibh. Vivamus viverra at erat et tristique. Proin faucibus eros vitae lectus blandit consectetur. Nunc quis enim congue, suscipit augue in, rhoncus odio. Vivamus varius, mi a mattis sollicitudin, lacus odio laoreet libero, et pellentesque lectus turpis vel felis. Vivamus eget metus tempor, tempus sapien vitae, pellentesque diam. Fusce nec nisl molestie, accumsan diam at, pellentesque elit. Donec quis metus pharetra, porta quam sed, vulputate elit.", 0);
+    makeReading("https://www.youtube.com/embed/XDA7WSMyiro", "It was the best of times. It was the worst of times.", 1);
   }
 
   // Modify State functions
@@ -66,9 +72,9 @@ contract TaroEth is Ownable{
 
   function makePetition(string _comments, bool[8] _topics, Topic _showcaseTopic, VideoStorageOptions _storageOption) payable public {
     require(msg.value >= minimumIncentive);
-    require(_topics != [false, false, false, false, false, false, false, false]);
-    require(_showcaseTopic >= 0 && showcaseTopic < 8);
-    require(_storageOption >= 0 && showcaseTopic < 3);
+    /* require(_topics != [false, false, false, false, false, false, false, false]); */
+    /* require(_showcaseTopic >= 0 && _showcaseTopic < 8);
+    require(_storageOption >= 0 && _storageOption < 3); */
     if (addressToPetitionIndexes[msg.sender].length == 0){
       petitionersAddresses.push(msg.sender);
     }
@@ -96,7 +102,7 @@ contract TaroEth is Ownable{
     msg.sender.transfer(petitions[_index].incentive);
   }
 
-  function makeReading(string _url, string _commentary, uint _index) external onlyOwner existingPetition(_index) {
+  function makeReading(string _url, string _commentary, uint _index) public onlyOwner existingPetition(_index) {
     require(petitions[_index].status == PetitionStatus.Pending);
     petitions[_index].status = PetitionStatus.Fulfilled;
     unlockedBalance.add(petitions[_index].incentive);
@@ -145,6 +151,33 @@ contract TaroEth is Ownable{
     }
   }
 
+  function getPetition(uint _index)
+  public
+  view
+  existingPetition(_index)
+  returns(uint256 incentive,
+          string comments,
+          uint32 turnaround,
+          bool[8] topics,
+          uint8 status,
+          uint8 showcaseTopic,
+          uint8 storageOption
+          ){
+    Petition memory petition = petitions[_index];
+    return(petition.incentive,petition.comments,petition.turnaround, petition.topics, uint8(petition.status),uint8(petition.showcaseTopic),uint8(petition.storageOption));
+  }
+
+  function getReading(uint _index)
+  external
+  view
+  existingPetition(_index)
+  returns(string url, string commentary){
+    require(petitions[_index].status == PetitionStatus.Fulfilled);
+    Reading memory reading = petitions[_index].reading;
+    return (reading.url, reading.commentary);
+  }
+
+
   function getPetitionsByPetitioner(address _petitioner)
   external
   view
@@ -185,11 +218,5 @@ contract TaroEth is Ownable{
       storageOption[i]  = uint8(_petitions[i].storageOption);
     }
     return (petitionIndexes, petitioners, incentives, turnarounds, status, showcaseTopic, storageOption);
-  }
-
-  function getReading(uint _index) external view existingPetition(_index) returns(string, string)  {
-    require(petitions[_index].status == PetitionStatus.Fulfilled);
-    Reading storage reading = petitions[_index].reading;
-    return (reading.url, reading.commentary);
   }
 }

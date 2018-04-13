@@ -2,6 +2,7 @@
 
 body {
   background-color: #f8fff8;
+  color: #666666;
 }
 
 body,
@@ -54,39 +55,19 @@ ul li:not(:last-child) {
   margin-bottom: 15px;
 }
 
-/* NAVBAR */
-
-.navbar {
-  position: fixed;
-  padding: 5px;
-  background: #0c1a2b;
-  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+.site-wrap {
+  max-width: 1500px;
+  margin: 20px auto;
+  background: #edfbef;
+  padding:40px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  transform: scale(0.98);
+  transition: transform 0.5s;
+  letter-spacing: 1px;
+  font-family:'Fira Mono', monospace;
+  border: solid  4px mistyrose;
 }
-
-.navbar a {
-  color: #fff;
-}
-
-.navbar a:active,
-.navbar a:focus,
-.navbar a:hover {
-  background: #233e5e;
-}
-
-.navbar .pure-menu-heading {
-  font-weight: bold;
-  text-transform: none;
-}
-
-.navbar .navbar-right {
-  float: right;
-}
-
-.navbar .uport-logo {
-  height: 16px;
-  margin-right: 10px;
-}
-
 /* LOADING SCREEN */
 
 .loading-screen {

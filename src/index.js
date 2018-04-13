@@ -10,7 +10,12 @@ import _ from 'lodash'
 import App from './App'
 import HomeContainer from './layouts/home/HomeContainer'
 import Navbar from './layouts/navbar/Navbar'
+import Footer from './layouts/footer/Footer'
 import LoadingContainer from './layouts/loading/LoadingContainer'
+import PetitionsContainer from './layouts/petition/petitions-container/PetitionsContainer.js'
+import PetitionForm from './layouts/petition/petition-form/PetitionForm.js'
+import Petition from './layouts/petition/petition/Petition.js'
+import Component404 from './layouts/404/Component404.js'
 
 // Contracts
 import TaroEth from './../build/contracts/TaroEth.json'
@@ -50,10 +55,23 @@ ReactDOM.render((
               <Route path="/" component={App}>
                 <IndexRoute component={HomeContainer} />
               </Route>
+              <Route path="/petitions/:modifier" component={App}>
+                <IndexRoute component={PetitionsContainer} />
+              </Route>
+              <Route path="/petition/new" component={App}>
+                <IndexRoute component={PetitionForm} />
+              </Route>
+              <Route path="/petition/:id" component={App}>
+                <IndexRoute component={Petition} />
+              </Route>
+              <Route path="/404" component={App}>
+                <IndexRoute component={Component404} />
+              </Route>
             </Router>
           </LoadingContainer>
         </Provider>
       </DrizzleProvider>
+      <Footer/>
     </div>
   ),
   document.getElementById('root')

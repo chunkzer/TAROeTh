@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  color: #666666;
+}
+
+.petition-section {
+  display: flex
+}
+
+.reading-section {
+  display: flex
+}
+.main-topic-img{
+  flex: 1;
+  width: 800;
+  height: 1381;
+  margin: 10px;
+}
+
+.petition-info {
+  flex: 1;
+  margin: 10px;
+}
+
+.reading-video {
+  flex: 1;
+  min-height: 500px;
+}
+
+.reading-commentary {
+  flex: 1;
+}

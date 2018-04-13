@@ -62,8 +62,8 @@ class PetitionForm extends Component {
     if(this.state.formValid){
       this.TaroEth.methods.makePetition.cacheSend(this.state.comments,
                                                 Object.values(this.state.topics),
-                                                PetitionMap.rTopic(this.state.showcaseTopic),
-                                                PetitionMap.rStorageOption(this.state.storageOption),
+                                                PetitionMap.topicObj[this.state.showcaseTopic].id,
+                                                PetitionMap.rStorageOption[this.state.storageOption],
                                                 {value: this.state.incentive});
     }else{
       this.setState(() => ({displayFormErrors: true}));
@@ -105,7 +105,7 @@ class PetitionForm extends Component {
   validateFields() {
     console.log('validateFields!')
     let fieldValidationErrors = {};
-    if(typeof PetitionMap.rTopic[this.state.showcaseTopic] === "undefined"){
+    if(typeof PetitionMap.topicObj[this.state.showcaseTopic] === "undefined"){
       fieldValidationErrors.topics = 'Please choose a favored topic to continue';
     }
     if(typeof PetitionMap.rStorageOption[this.state.storageOptions] === "undefined"){
@@ -141,27 +141,28 @@ class PetitionForm extends Component {
 
 
     return (
-      <form>
-        <h1>What's on your mind?</h1>
-        <label>Make sure to pick out ONE favored topic...</label>
-        {this.state.displayFormErrors && this.state.formErrors.topics ? <div className="form-error">{this.state.formErrors.topics}</div> : ''}
-        <div className="selector">
-          {topicBoxes}
-        </div>
-
-        <h1>Would you mind sharing a little about yourself?</h1><br/>
-        <label>
-          This is optional so don't worry too much about it.
-          <div>
-            <textarea name="comments" value={this.state.comments} onChange={this.handleChange} rows="5" cols="70"/>
-          </div>
-        </label>
-
-        <h1>Where do you want your reading stored?</h1>
-        {this.state.displayFormErrors && this.state.formErrors.storageOptions ? <div className="form-error">{this.state.formErrors.storageOptions}</div> : ''}
+      <div className="site-wrap">
+        <form>
+          <h1>What's on your mind?</h1>
+          <label>Make sure to pick out ONE favored topic...</label>
+          {this.state.displayFormErrors && this.state.formErrors.topics ? <div className="form-error">{this.state.formErrors.topics}</div> : ''}
           <div className="selector">
-            {storageBoxes}
+            {topicBoxes}
           </div>
+
+          <h1>Would you mind sharing a little about yourself?</h1><br/>
+          <label>
+            This is optional so don't worry too much about it.
+            <div>
+              <textarea name="comments" value={this.state.comments} onChange={this.handleChange} rows="5" cols="70"/>
+            </div>
+          </label>
+
+          <h1>Where do you want your reading stored?</h1>
+          {this.state.displayFormErrors && this.state.formErrors.storageOptions ? <div className="form-error">{this.state.formErrors.storageOptions}</div> : ''}
+            <div className="selector">
+              {storageBoxes}
+            </div>
 
         <h1>Finally I'd like to ask you to add a little ETH incentive</h1>
         <label>
@@ -173,6 +174,7 @@ class PetitionForm extends Component {
         </label>
         <button key="submit" className="pure-button" type="button" onClick={() => this.handleSubmit()}>Submit</button>
       </form>
+    </div>
     )
   }
 }

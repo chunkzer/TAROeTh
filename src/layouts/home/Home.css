@@ -1,0 +1,27 @@
+.home-title {
+  text-align: center;
+}
+
+.make-petition {
+  font-size: 25px;
+  padding: 3px;
+  background-color: #ec407a;
+  border: solid 2px #c2185b;
+  border-radius: 1px;
+  transition: background-color 300ms ease-out;
+  transition: font-size 0.2s;
+  box-sizing: border-box;
+  color: #fff;
+  width: 300px;
+}
+
+.make-petition:hover {
+  box-shadow: 0 5px 4px 0 rgba(0,0,0,0.4);
+  background-color: #fc407a;
+  font-size: 27px;
+
+}
+
+.latest-petitions {
+  text-align: center;
+}

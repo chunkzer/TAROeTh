@@ -12,32 +12,33 @@ html {
   box-sizing: inherit;
 }
 
-.site-wrap {
-  max-width: 1500px;
-  margin: 20px auto;
-  background: #edfbef;
-  padding:40px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  transform: scale(0.98);
-  transition: transform 0.5s;
-  letter-spacing: 1px;
-  font-family:'Fira Mono', monospace;
-  border: solid  4px mistyrose;
-}
-
 header {
   text-align: center;
   font-size: 38px;
   font-weight: 800;
-  height: 15vh;
+}
+
+.header {
+  height: 18vh;
   background-color: mistyrose;
   background-size:cover;
   display:flex;
+  flex-direction: column;
   align-items:center;
   justify-content: center;
-  color: white;
+  color: #666666;
 }
+
+.navbar-menu {
+  width: 100vw;
+  display: flex;
+  justify-content: space-around;
+}
+
+.navbar-menu > * {
+  flex-basis: 190px;
+}
+
 
 h1 {
   letter-spacing: 1px;
