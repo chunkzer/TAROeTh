@@ -1,44 +1,3 @@
-.selector {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.select-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 120px;
-  height: 100px;
-  margin: 3px;
-  border: 2px solid mistyrose;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.select-box.selected {
-  border: 2px solid #265DF1;
-  background-color: #EFF6FF;
-}
-
-.select-box.selected.faved {
-  border: 2px solid gold;
-  background-color: #DDE3AB;
-}
-
-.select-box:hover {
-  box-shadow: 0px 4px 4px rgba(0,0,0,0.06)
-}
-
-.box-topic {
-  font-size: 1em;
-  font-family: "Neue-Haas-Grotesk-Text-Regular", "Helvetica Neue", "Helvetica", "sans-serif";
-  letter-spacing: 0.1px;
-  line-height: 1.45em;
-  font-weight: normal;
-  color: #666666;
-}
-
 form > h1 {
   font-family: "Neue-Haas-Grotesk-Text-Regular", "Helvetica Neue", "Helvetica", "sans-serif";
   color: #666666;
@@ -81,4 +40,48 @@ button {
 }
 .card-preview {
   margin-left: 13px;
+}
+
+.hidden {
+  display:none;
+}
+
+.spread-preview {
+  display: flex;
+  flex-direction: column;
+}
+
+.top-preview {
+  display: flex;
+  justify-content:  space-between;
+}
+
+.topic-preview {
+  flex-basis: 300px;
+  margin: 5px;
+}
+
+.card-preview-major {
+  margin: 5px;
+  flex-basis: 400px;
+}
+
+.card-preview-minor{
+  flex-basis: 400px;
+  margin: 5px;
+}
+
+.bottom-preview {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.reading-preview-text{
+  margin: 5px;
+  flex: 1;
+}
+
+.reading-spread {
+  display: flex;
+  flex-direction: column;
 }

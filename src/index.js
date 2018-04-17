@@ -11,7 +11,7 @@ import App from './App'
 import HomeContainer from './layouts/home/HomeContainer'
 import LoadingContainer from './layouts/loading/LoadingContainer'
 import PetitionsContainer from './layouts/petition/petitions-container/PetitionsContainer.js'
-import PetitionForm from './layouts/petition/petition-form/PetitionForm.js'
+import FormContainer from './layouts/petition/petition-form/FormContainer.js'
 import Petition from './layouts/petition/petition/Petition.js'
 import Component404 from './layouts/404/Component404.js'
 
@@ -55,7 +55,7 @@ ReactDOM.render((
                 <IndexRoute component={PetitionsContainer} />
               </Route>
               <Route path="/petition/new" component={App}>
-                <IndexRoute component={PetitionForm} />
+                <IndexRoute component={FormContainer} />
               </Route>
               <Route path="/petition/:id" component={App}>
                 <IndexRoute component={Petition} />

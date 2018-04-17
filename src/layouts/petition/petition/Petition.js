@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import PetitionMap from '../../../util/TaroEthSerializer.js'
 import PetitionPreview from '../petition-preview/PetitionPreview.js'
-import '../petition-preview/PetitionPreview.css'
 import './Petition.css'
 import Moment from 'react-moment'
 
@@ -15,8 +14,7 @@ class Petition extends Component {
     let TaroEth = context.drizzle.contracts.TaroEth;
     this.petitionIndex = String(this.props.params.id - 1);
     this.petitionKey = TaroEth.methods.getPetition.cacheCall(this.petitionIndex);
-
-    this.getReading = TaroEth.methods.getReading;
+    this.readingKey = TaroEth.methods.getReading.cacheCall(this.petitionIndex);
   }
 
   castReadingData(data) {
@@ -61,31 +59,63 @@ class Petition extends Component {
     }
 
     var petition = this.castPetitionData(TaroEth.getPetition[this.petitionKey].value);
+    var reading = TaroEth.getReading[this.readingKey] ? TaroEth.getReading[this.readingKey].value : '';
+
     var topicsArr = []
     petition.topics.forEach( (topic, index) => topicsArr.push(<b key={index}>{topic}</b>))
-    var reading;
     var readingSection;
     var cancelButton;
     var cancellableBy;
+    debugger;
 
-    if(petition.status === 'Fulfilled'){
-      this.readingKey = this.getReading.cacheCall(this.petitionIndex);
-      reading = TaroEth.getReading[this.readingKey].value;
+    if(reading) {
       readingSection =  (
-        <div className="reading-section">
-          <div className="reading-commentary">
-            <h1> Reading </h1>
-            <p>{reading.commentary}</p>
+        <div className="petition-reading-section">
+          <div className="petition-reading-spread">
+            <div className="petition-spread-preview">
+              <h1> Spread </h1>
+              <div className="petition-top-preview">
+                <div className="petition-card-preview-major">
+                  <img src={PetitionMap.fullcards[reading.spread[0].card]}/>
+                </div>
+                {petition.status === 'Fulfilled' ? (
+                  <div className="petition-reading-commentary">
+                    <h1> Reading </h1>
+                    <p>{reading.commentary}</p>
+                  </div>
+                  ) : null
+                }
+              </div>
+              <div className="petition-bottom-preview">
+                <div className="petition-card-preview-minor">
+                  <img src={PetitionMap.fullcards[reading.spread[1]]}/>
+                </div>
+                <div className="petition-card-preview-minor">
+                  <img src={PetitionMap.fullcards[reading.spread[2]]}/>
+                </div>
+                <div className="petition-card-preview-minor">
+                  <img src={PetitionMap.fullcards[reading.spread[3]]}/>
+                </div>
+              </div>
+            </div>
+            {petition.status === 'Fulfilled' ? (
+              <div className="petition-interpretation-section">
+                <h1>Interpretation</h1>
+                <iframe  className="petition-interpretation-video" src={reading.url} frameBorder="0" allowFullScreen></iframe>
+              </div>
+              ) : null
+            }
           </div>
-            <iframe  className="reading-video" src={reading.url} frameBorder="0" allowFullScreen></iframe>
+
         </div>
       )
-    }else if(petition.status === 'Pending') {
+    }
+    if(petition.status === 'Pending') {
       cancellableBy = (<li>Cancellable by: <b><Moment format="YYYY/MM/DD">{petition.turnaround}</Moment></b></li>)
       if(this.isCancellable(petition)){
         cancelButton = (
           <div>
-            <button className="cancellation" onClick={() => this.cancelPetition()}> CANCEL </button><br/>
+            <button className="petition-cancellation" onClick={() => this.cancelPetition()}> CANCEL </button><br/>
             <label>This will get your incentive back, though it won't refund gas fees...</label>
           </div>
         )
@@ -97,12 +127,12 @@ class Petition extends Component {
 
     return (
       <div className="site-wrap container">
-      <div className="petition-section">
-        <div className="main-topic-img">
+      <div className="petition-primary-section">
+        <div className="petition-main-topic-img">
           <img src={PetitionMap.topicObj[petition.showcaseTopic].fullcard}/>
         </div>
-        <div className="petition-info">
-          <h1 className='topic'>
+        <div className="petition-primary-info">
+          <h1 className='petition-topic'>
             {PetitionMap.topicObj[petition.showcaseTopic].header}
           </h1>
           <label>Topics: {topicsArr}</label>
@@ -113,7 +143,7 @@ class Petition extends Component {
             {cancellableBy}
 
           </ul>
-          <p className='comments'>
+          <p className='petition-comments'>
             {petition.comments}
           </p>
           { cancelButton }

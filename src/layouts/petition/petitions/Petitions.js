@@ -6,6 +6,7 @@ import PetitionPreview from '../petition-preview/PetitionPreview.js'
 import _ from 'lodash'
 import PetitionMap from '../../../util/TaroEthSerializer.js'
 import '../petition-preview/PetitionPreview.css'
+import utils from 'web3-utils'
 
 
 /*
@@ -35,7 +36,7 @@ class Petitions extends Component {
     var results = _.zip(...[data.petitioner, data.incentive, data.turnaround, data.status, data.showcaseTopic, data.storageOption, data.indexes])
     .map(arr => {var result = new Object
       result.petitioner = arr[0];
-      result.incentive = arr[1];
+      result.incentive = utils.fromWei(arr[1]);
       let turnaround_date = new Date();
       turnaround_date.setSeconds(arr[2]);
       result.turnaround = turnaround_date;
@@ -65,7 +66,6 @@ class Petitions extends Component {
     }
 
     var contractResponse = TaroEth[this.props.method][this.dataKey].value
-
     let petitions = this.castDisplayData(contractResponse)
     const displayObjectProps = []
     var filterFunctions = this.props.filters ? this.props.filters : [];

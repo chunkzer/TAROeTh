@@ -7,7 +7,7 @@ class Navbar extends Component {
     return (
       <div>
         <div className="header">
-          <header>T A R O e T h</header>
+          <Link to="/"><header>T A R O e T h</header></Link>
           <ul className="navbar-menu">
             <li><Link to="/petitions/me"> My Petitions</Link></li>
             <Link to="/petitions/all"> <li>All Petitions</li></Link>

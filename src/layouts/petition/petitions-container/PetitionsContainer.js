@@ -84,13 +84,26 @@ class PetitionsContainer extends Component {
         onSelect={(e) => this.handleClick(filter.title)}
      /></span>
    )})
+   var petitionsMethod;
+   var petitionsArgs;
+   if(this.containerType === 'Self'){
+      petitionsArgs   = [this.props.accounts[0]];
+      petitionsMethod = 'getPetitionsByPetitioner';
+   }else if(this.containerType === 'Address'){
+     petitionsArgs   = [this.props.params.modifier];
+     petitionsMethod = 'getPetitionsByPetitioner';
+   }else {
+     petitionsArgs   = [];
+     petitionsMethod = 'getAllPetitions';
+   }
 
     return (
       <div className="site-wrap">
         <div className="selector">
           {filterBoxes}
         </div>
-        <Petitions method="getLastPetitions" filters={filterFuncArr}/>
+
+        <Petitions method={petitionsMethod} methodArgs={petitionsArgs} filters={filterFuncArr}/>
       </div>
     )
   }
