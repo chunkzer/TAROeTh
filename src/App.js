@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import Navbar from './layouts/navbar/Navbar'
-import Footer from './layouts/footer/Footer'
+import Navbar from './layouts/components/navbar/Navbar'
+import Footer from './layouts/components/footer/Footer'
 
 // Styles
 import './css/oswald.css'

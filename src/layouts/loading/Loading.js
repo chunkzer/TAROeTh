@@ -12,8 +12,9 @@ class Loading extends Component {
         <main className="container loading-screen">
           <div className="pure-g">
             <div className="pure-u-1-1">
-              <h1>⚠️</h1>
-              <p>This browser has no connection to the Ethereum network. Please use the Chrome/FireFox extension MetaMask, or dedicated Ethereum browsers Mist or Parity.</p>
+              <p>
+                This browser has no connection to the Ethereum network. Please use the Chrome/FireFox extension MetaMask, or dedicated Ethereum browsers Mist or Parity.
+              </p>
             </div>
           </div>
         </main>
@@ -30,7 +31,7 @@ class Loading extends Component {
         <div className="pure-g">
           <div className="pure-u-1-1">
             <h1>⚙️</h1>
-            <p>Loading dapp...</p>
+            <p>Loading dapp...make sure you have a connection to web3</p>
           </div>
         </div>
       </main>

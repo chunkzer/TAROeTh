@@ -1,0 +1,102 @@
+form > h1 {
+  font-family: "Neue-Haas-Grotesk-Text-Regular", "Helvetica Neue", "Helvetica", "sans-serif";
+  color: #666666;
+
+}
+
+button {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.eth-usd {
+  margin-left: 5px;
+}
+
+.main-topic {
+  align-self: flex-end;
+  margin-bottom: 16px;
+  margin-right: 8px;
+}
+
+.form-error {
+  border: 2px solid red;
+  border-radius:  3px;
+  padding: 6px;
+  background-color: #ffdae8;
+  animation: blinker .3s linear;
+  max-width: 800px;
+  /* opacity: 0; */
+
+}
+
+@keyframes blinker {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.petition-form {
+  display: flex;
+}
+.card-preview {
+  margin-left: 13px;
+}
+
+.hidden {
+  display:none;
+}
+
+.spread-preview {
+  display: flex;
+  flex-direction: column;
+}
+
+.top-preview {
+  display: flex;
+  justify-content:  space-between;
+}
+
+.topic-preview {
+  flex-basis: 300px;
+  margin: 5px;
+}
+
+.card-preview-major {
+  margin: 5px;
+  flex-basis: 400px;
+}
+
+.card-preview-minor{
+  flex-basis: 400px;
+  margin: 5px;
+}
+
+.bottom-preview {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.reading-preview-text{
+  margin: 5px;
+  flex: 1;
+}
+
+.reading-spread {
+  display: flex;
+  flex-direction: column;
+}
+
+.twitter-share-button {
+  color: blue;
+}
+
+.pending-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+}
+
+.pending_text > * {
+  flex: 1;
+}

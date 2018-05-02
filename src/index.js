@@ -8,12 +8,15 @@ import _ from 'lodash'
 
 // Layouts
 import App from './App'
-import HomeContainer from './layouts/home/HomeContainer'
+
+import About from './layouts/components/about/About.js'
+import Home from './layouts/components/home/Home.js'
+
+
 import LoadingContainer from './layouts/loading/LoadingContainer'
-import PetitionsContainer from './layouts/petition/petitions-container/PetitionsContainer.js'
-import FormContainer from './layouts/petition/petition-form/FormContainer.js'
-import Petition from './layouts/petition/petition/Petition.js'
-import Component404 from './layouts/404/Component404.js'
+import Petition from './layouts/containers/petition/Petition.js'
+import PetitionsContainer from './layouts/containers/petitions-container/PetitionsContainer.js'
+import FormContainer from './layouts/containers/petition-form/FormContainer.js'
 
 // Contracts
 import TaroEth from './../build/contracts/TaroEth.json'
@@ -48,20 +51,20 @@ ReactDOM.render((
         <Provider store={store}>
           <LoadingContainer>
             <Router history={history}>
-              <Route path="/" component={App}>
-                <IndexRoute component={HomeContainer} />
+              <Route path={process.env.PUBLIC_URL ? process.env.PUBLIC_URL : '/'}  component={App}>
+                <IndexRoute component={Home} />
               </Route>
-              <Route path="/petitions/:modifier" component={App}>
+              <Route path={process.env.PUBLIC_URL + "/petitions/:modifier"} component={App}>
                 <IndexRoute component={PetitionsContainer} />
               </Route>
-              <Route path="/petition/new" component={App}>
+              <Route path={process.env.PUBLIC_URL + "/about/"} component={App}>
+                <IndexRoute component={About} />
+              </Route>
+              <Route path={process.env.PUBLIC_URL + "/petition/new"} component={App}>
                 <IndexRoute component={FormContainer} />
               </Route>
-              <Route path="/petition/:id" component={App}>
+              <Route path={process.env.PUBLIC_URL + "/petition/:id"} component={App}>
                 <IndexRoute component={Petition} />
-              </Route>
-              <Route path="/404" component={App}>
-                <IndexRoute component={Component404} />
               </Route>
             </Router>
           </LoadingContainer>

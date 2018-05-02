@@ -1,0 +1,17 @@
+*,html{margin:0;padding:0}
+
+//variables
+$baseColor : #e74c3c;
+$fontColor : #fff;
+
+body{
+  background: $baseColor;
+  text-align: center;
+  font-family: 'Comfortaa', cursive;
+}
+svg{
+  width: 300px;
+  height: 300px;
+  margin: 30px;
+  display:inline-block;
+}

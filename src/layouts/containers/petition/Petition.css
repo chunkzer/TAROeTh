@@ -1,0 +1,89 @@
+.petition-container {
+  display: flex;
+  flex-direction: column;
+  color: #666666;
+}
+
+.petition-primary-section {
+  display: flex
+}
+
+.petition-reading-section {
+  display: flex
+}
+
+.petition-reading-spread {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.petition-main-topic-img{
+  flex: 1;
+  width: 800;
+  height: 1381;
+  margin: 10px;
+}
+
+.petition-primary-info {
+  flex: 1;
+  margin: 10px;
+}
+
+.petition-reading-commentary {
+  flex: 1;
+}
+
+
+.petition-spread-preview {
+  display: flex;
+  flex-direction: column;
+}
+
+.petition-top-preview {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.petition-topic-preview {
+  flex-basis: 300px;
+  margin: 5px;
+}
+
+.petition-card-preview-major {
+  margin: 5px;
+  flex-basis: 450px;
+}
+
+.petition-card-preview-minor{
+  flex-basis: 450px;
+  margin: 5px;
+}
+
+.petition-bottom-preview {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.petition-reading-preview-text{
+  margin: 5px;
+}
+
+.petition-reading-spread {
+  display: flex;
+  flex-direction: column;
+}
+
+.petition-interpretation-section {
+  align-self: center;
+}
+
+.petition-interpretation-video {
+  min-width: 1000px;
+  min-height: 562.5px;
+}
+
+.fetching {
+  display: flex;
+  justify-content: center;
+}
