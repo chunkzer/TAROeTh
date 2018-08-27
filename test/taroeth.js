@@ -1,5 +1,14 @@
 var TaroEth = artifacts.require("./TaroEth.sol");
 
+const jsonrpc = '2.0'
+const id = 0
+const send = (method, params = []) =>
+  web3.currentProvider.send({ id, jsonrpc, method, params })
+const timeTravel = async seconds => {
+  await send('evm_increaseTime', [seconds])
+  await send('evm_mine')
+}
+
 contract('TaroEth', function(accounts) {
   // Most of these functions test the basic functionality of adding and modifying
   // data that is relevant to the contracts basic operation. I.E. adding a petitions
@@ -16,20 +25,6 @@ contract('TaroEth', function(accounts) {
       assert.equal(data[4], 0, "status is not 'Pending'");
       assert.equal(data[5], 0, "showcaseTopic doesn't match");
       assert.equal(data[6], 0, "storageOption doesn't match");
-    });
-  });
-
-  // A user should be able to cancel his/her petition if the circumnstances permit it so
-  it("should cancel a Petition", function() {
-    return TaroEth.new().then(function(instance) {
-      TaroEthInstance = instance;
-      return TaroEthInstance.makePetition("Test", [true,false,false,false,false,false,false,false], 0, 0, [1,2,3,4], {from: accounts[0], value: 10000000});
-    }).then(function() {
-      return TaroEthInstance.cancelPetition(0);
-    }).then(function() {
-      return TaroEthInstance.getPetition.call(0);
-    }).then(function(data){
-      assert.equal(data[4], 2, "status is not equal to 'Cancelled'");
     });
   });
 
@@ -110,6 +105,22 @@ contract('TaroEth', function(accounts) {
     }).then(function(data) {
       assert.equal(data.length, 7, "It's not bringing 7 arrays for output parameter arity");
       assert.equal(data[0].length, 0, "It's not bringing an empty index array");
+    });
+  });
+
+  // A user should be able to cancel his/her petition if the circumnstances permit it so
+  it("should cancel a Petition", function() {
+    return TaroEth.new().then(function(instance) {
+      TaroEthInstance = instance;
+      return TaroEthInstance.makePetition("Test", [true,false,false,false,false,false,false,false], 0, 0, [1,2,3,4], {from: accounts[0], value: 10000000});
+    }).then(function() {
+      //As a default over a week has to pass with no reading for cancellation to be possible.
+      timeTravel(904800);
+      return TaroEthInstance.cancelPetition(0);
+    }).then(function() {
+      return TaroEthInstance.getPetition.call(0);
+    }).then(function(data){
+      assert.equal(data[4], 2, "status is not equal to 'Cancelled'");
     });
   });
 });
