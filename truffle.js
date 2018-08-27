@@ -1,5 +1,7 @@
 var HDWalletProvider = require("truffle-hdwallet-provider");
 
+// Insert mnemonic here
+let mnemonic = "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat"
 var infura_apikey = "HTh3kxlPnMM977WvODPY";
 
 module.exports = {

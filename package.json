@@ -68,6 +68,7 @@
     "redux-auth-wrapper": "^1.0.0",
     "redux-saga": "^0.15.3",
     "redux-thunk": "^2.2.0",
+    "truffle": "^4.1.14",
     "web3-utils": "^1.0.0-beta.34"
   },
   "scripts": {
