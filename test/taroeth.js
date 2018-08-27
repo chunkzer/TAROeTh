@@ -1,7 +1,9 @@
 var TaroEth = artifacts.require("./TaroEth.sol");
 
 contract('TaroEth', function(accounts) {
-
+  // Most of these functions test the basic functionality of adding and modifying
+  // data that is relevant to the contracts basic operation. I.E. adding a petitions
+  // is a necessary step to doing anything else
   it("should store a Petition", function() {
     return TaroEth.new().then(function(instance) {
       TaroEthInstance = instance;
@@ -17,6 +19,7 @@ contract('TaroEth', function(accounts) {
     });
   });
 
+  // A user should be able to cancel his/her petition if the circumnstances permit it so
   it("should cancel a Petition", function() {
     return TaroEth.new().then(function(instance) {
       TaroEthInstance = instance;
@@ -30,6 +33,8 @@ contract('TaroEth', function(accounts) {
     });
   });
 
+  // Readings are the end product of this dApp, so they being storeable in the
+  // contract is a necessity
   it("should store a Reading", function() {
     return TaroEth.new().then(function(instance) {
       TaroEthInstance = instance;
@@ -44,6 +49,8 @@ contract('TaroEth', function(accounts) {
     });
   });
 
+  // This is a GET like function necessary for efficiently presenting information
+  // from the contract that is relevant to the user in the dApp.
   it("should get all the petitions for one address", function() {
     return TaroEth.new().then(function(instance) {
       TaroEthInstance = instance;
@@ -82,6 +89,7 @@ contract('TaroEth', function(accounts) {
     });
   });
 
+  // Testing that edge cases don't blow up my dApp
   it("should get return an output parameter arity sized array of empty arrays if there are no petitions", function() {
     return TaroEth.new().then(function(instance) {
       TaroEthInstance = instance;
@@ -93,7 +101,7 @@ contract('TaroEth', function(accounts) {
     });
   });
 
-
+  // Testing that edge cases don't blow up my dApp
   it("should not return petitionsn if address has none", function() {
     return TaroEth.new().then(function(instance) {
       TaroEthInstance = instance;

@@ -4,6 +4,41 @@ import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
 import 'zeppelin-solidity/contracts/math/SafeMath.sol';
 import 'zeppelin-solidity/contracts/lifecycle/Pausable.sol';
 
+// Design Pattern considerations:
+
+// Included Pausable as a way to stop this contract from executing if it's being
+// interacted with in a destructive way that was never intended, as a last resort, or
+// if I as owner can't find an administrative user to transfer ownership that will continue
+// operating this contract (it does require an interested owner to produce readings)
+
+// Included Ownable pattern as this contract is not an open marketplace, but a decentralized
+// order filling mechanism where the order attendant is the contract owner and there is not much
+// here that is automatized. So the responsability and power associated with that position should be
+// only available to the relevant stake holder (owner).
+
+// Not INCLUDED: Arbitrage
+// A glaring flaw and need for trust is present in this contract. A malicious Owner could
+// simply claim fees without making any readings! Why not include arbitrage to make sure owner is doing his part?
+// Well, for one, the application is not financially minded, there could be some transactios but its mostly for fun and
+// accordingly it assumes good faith from its participants (for the most part) and secondly
+// owner has skin in the game to operate the contract in a fair manner! Any outright breach in expected
+// operated procedure would be observable by the public and crash contract operators credibility.
+
+
+// Security Considerations:
+
+// To prevent overflow / underflow exploits, most math operations in this app are done with SafeMath.
+// Care has been taken with operations that involve ETH movements for they to be triggered
+// by PULL operations over PUSH operations to avoid many common pitfalls. Additionally any transfer operations
+// occurr only after all of the business logic and balance settling has resolved, this is to avoid reentrancy attacks.
+
+
+// Stretch Requirements:
+
+// Contract has been deployed to main net and rinkeby. You can play around with it at:
+// https://chunkzer.github.io/TAROeTh
+
+
 contract TaroEth is Ownable, Pausable{
   using SafeMath for uint256;
 
