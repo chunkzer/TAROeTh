@@ -152,7 +152,7 @@ contract TaroEth is Ownable, Pausable{
   function cancelPetition(uint256 _index) public existingPetition(_index) {
     require(petitions[_index].petitioner == msg.sender);
     require(petitions[_index].status == PetitionStatus.Pending);
-    require(petitions[_index].turnaround < now);
+    require(petitions[_index].turnaround > now);
     petitions[_index].status = PetitionStatus.Cancelled;
     msg.sender.transfer(petitions[_index].incentive);
   }

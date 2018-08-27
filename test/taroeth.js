@@ -29,7 +29,7 @@ contract('TaroEth', function(accounts) {
     }).then(function() {
       return TaroEthInstance.getPetition.call(0);
     }).then(function(data){
-      assert.equal(data[4], 2, "status is equal to 'Cancelled'");
+      assert.equal(data[4], 2, "status is not equal to 'Cancelled'");
     });
   });
 
@@ -40,7 +40,7 @@ contract('TaroEth', function(accounts) {
       TaroEthInstance = instance;
       return TaroEthInstance.makePetition("Test", [true,false,false,false,false,false,false,false], 0, 0, [1,2,3,4], {from: accounts[0], value: 10000000});
     }).then(function() {
-      TaroEthInstance.makeReading("Youtube.com", "You're screwed. Spiritually.", 0)
+      TaroEthInstance.updateReading("Youtube.com", "You're screwed. Spiritually.", 0)
     }).then(function() {
       return TaroEthInstance.getReading.call(0);
     }).then(function(data) {
